@@ -110,7 +110,6 @@ pcall(function()
         while not map or not map:FindFirstChild("CoinContainer") do
             if char and char:FindFirstChild("HumanoidRootPart") then
                 -- char.HumanoidRootPart.CFrame = CFrame.new(-12, 140, 15)
-                task.wait(5)
                 VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.W, false, game)
                 task.wait(0.3)
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.W, false, game)
@@ -150,7 +149,7 @@ pcall(function()
             task.wait(0.5) -- Additional wait to ensure collection
             char.HumanoidRootPart.CFrame = CFrame.new(-15, 140, 15)
             print("Coin collected, total: " .. coinsCollected .. " coins")
-			task.wait(0.5)
+			task.wait(2)
         else
             char.HumanoidRootPart.CFrame = CFrame.new(-15, 140, 15)
             task.wait(0.5)
