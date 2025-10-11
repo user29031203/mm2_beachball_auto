@@ -137,7 +137,7 @@ pcall(function()
             task.wait(0.5) -- Additional wait to ensure collection
             char.HumanoidRootPart.CFrame = CFrame.new(132, 140, 60)
             print("Coin collected, total: " .. coinsCollected .. " coins")
-			task.wait(0.5)
+			task.wait(1.5)
         else
             char.HumanoidRootPart.CFrame = CFrame.new(132, 140, 60)
             task.wait(0.5)
