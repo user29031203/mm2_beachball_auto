@@ -9,6 +9,9 @@ pcall(function()
     local char = plr.Character -- Initialize char
     local GC = getconnections or get_signal_cons
 
+    -- Reference point for distance calculation
+    local REF_POINT = Vector3.new(-12, 140, 15)
+
     -- Function to get coin count from GUI
     local function getCoinCount()
         local success, coinLabel = pcall(function()
@@ -80,6 +83,7 @@ pcall(function()
 
     local coinsCollected = getCoinCount()
     while true do
+
         -- Reset character by setting health to 0 when 40 coins collected
 		coinsCollected = getCoinCount()
         if coinsCollected >= 40 then
@@ -105,7 +109,16 @@ pcall(function()
         -- Wait for valid map and CoinContainer
         while not map or not map:FindFirstChild("CoinContainer") do
             if char and char:FindFirstChild("HumanoidRootPart") then
-                char.HumanoidRootPart.CFrame = CFrame.new(132, 140, 60)
+                -- char.HumanoidRootPart.CFrame = CFrame.new(-12, 140, 15)
+                task.wait(5)
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.W, false, game)
+                task.wait(0.3)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.W, false, game)
+                task.wait(0.1)
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.S, false, game)
+                task.wait(0.3)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.S, false, game)
+                task.wait(0.1) -- Additional wait to ensure collection
             end
             task.wait(1)
         end
