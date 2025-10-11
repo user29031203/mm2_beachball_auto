@@ -135,11 +135,11 @@ pcall(function()
             task.wait(0.1)
             VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.S, false, game)
             task.wait(0.5) -- Additional wait to ensure collection
-            char.HumanoidRootPart.CFrame = CFrame.new(132, 140, 60)
+            char.HumanoidRootPart.CFrame = CFrame.new(-15, 140, 15)
             print("Coin collected, total: " .. coinsCollected .. " coins")
-			task.wait(2)
+			task.wait(0.5)
         else
-            char.HumanoidRootPart.CFrame = CFrame.new(132, 140, 60)
+            char.HumanoidRootPart.CFrame = CFrame.new(-15, 140, 15)
             task.wait(0.5)
         end
     end
