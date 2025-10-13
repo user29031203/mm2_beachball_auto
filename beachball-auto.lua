@@ -6,13 +6,11 @@ pcall(function()
     local VirtualInputManager = game:GetService("VirtualInputManager")
     local placeId = game.PlaceId
     local plr = Players.LocalPlayer
-    local char = plr.Character -- Initialize char
+    local char = plr.Character
     local GC = getconnections or get_signal_cons
 
-    -- Reference point for distance calculation
     local REF_POINT = Vector3.new(-12, 140, 15)
 
-    -- Function to get coin count from GUI
     local function getCoinCount()
         local success, coinLabel = pcall(function()
             return plr.PlayerGui:FindFirstChild("MainGUI")
@@ -28,17 +26,13 @@ pcall(function()
             local number = tonumber(string.match(coinLabel.Text, "%d+")) or tonumber(coinLabel.Text)
             return number or 0
         end
-        return 0 -- Fallback if label not found
+        return 0
     end
 
     -- Disable anti-idle
     if GC then
         for _, v in pairs(GC(plr.Idled)) do
-            if v.Disable then
-                v:Disable()
-            elseif v.Disconnect then
-                v:Disconnect()
-            end
+            if v.Disable then v:Disable() elseif v.Disconnect then v:Disconnect() end
         end
     else
         local vu = cloneref(game:GetService("VirtualUser"))
@@ -54,21 +48,17 @@ pcall(function()
             local suc, err = pcall(function()
                 TeleportService:TeleportToPlaceInstance(placeId, plr)
             end)
-            if suc then
-                break
-            else
-                task.wait(2)
-            end
+            if suc then break else task.wait(2) end
         end
     end)
 
-    -- Update char when character respawns
+    -- Character respawn tracking
     plr.CharacterAdded:Connect(function(newChar)
         char = newChar
         print("Character respawned, script continuing")
     end)
 
-    -- Track map
+    -- Detect map
     local map = nil
     game.Workspace.DescendantAdded:Connect(function(m)
         if m:IsA("Model") and m:GetAttribute("MapID") then
@@ -81,22 +71,42 @@ pcall(function()
         end
     end)
 
-    local coinsCollected = getCoinCount()
-    while true do
+    local afkMode = false
+    local lastPosition = nil
 
-        -- Reset character by setting health to 0 when 40 coins collected
-		coinsCollected = getCoinCount()
-        if coinsCollected >= 40 then
-            if char and char:FindFirstChild("Humanoid") then
-                -- Wait for character to respawn
-                repeat
-                    task.wait(0.5)
-                    char = plr.Character
-                until char and char:FindFirstChild("HumanoidRootPart")
-            end
+    while true do
+        local currentCoins = getCoinCount()
+
+        -- Exit AFK mode when counter resets to 0
+        if afkMode and currentCoins == 0 then
+            afkMode = false
+            print("[INFO] Coin counter reset — resuming farming.")
+            task.wait(1)
         end
 
-        -- Ensure character is valid
+        -- If AFK, just chill
+        if afkMode then
+            task.wait(5)
+            continue
+        end
+
+        -- Save position before collecting each coin
+        if char and char:FindFirstChild("HumanoidRootPart") then
+            lastPosition = char.HumanoidRootPart.CFrame
+        end
+
+        -- When 40 coins reached, teleport to last position + go AFK
+        if currentCoins >= 40 then
+            if lastPosition and char and char:FindFirstChild("HumanoidRootPart") then
+                char.HumanoidRootPart.CFrame = lastPosition
+                print("[INFO] 40 coins reached — returning to last position & going AFK.")
+                afkMode = true
+            end
+            task.wait(1)
+            continue
+        end
+
+        -- Ensure valid character
         if not char or not char:FindFirstChild("HumanoidRootPart") then
             repeat
                 char = plr.Character
@@ -104,25 +114,14 @@ pcall(function()
             until char and char:FindFirstChild("HumanoidRootPart")
         end
 
-        -- Wait for valid map and CoinContainer
+        -- Wait for map & coins
         while not map or not map:FindFirstChild("CoinContainer") do
-            if char and char:FindFirstChild("HumanoidRootPart") then
-                -- char.HumanoidRootPart.CFrame = CFrame.new(-12, 140, 15)
-                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.W, false, game)
-                task.wait(0.3)
-                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.W, false, game)
-                task.wait(0.1)
-                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.S, false, game)
-                task.wait(0.3)
-                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.S, false, game)
-                task.wait(0.1) -- Additional wait to ensure collection
-            end
             task.wait(1)
         end
 
-        -- Find collectible coin
+        -- Find a coin
         local coinToCollect = nil
-        for _, coin in ipairs(map:FindFirstChild("CoinContainer"):GetChildren()) do
+        for _, coin in ipairs(map.CoinContainer:GetChildren()) do
             if coin:IsA("Part") and coin.Name == "Coin_Server" and coin:GetAttribute("CoinID") == "BeachBall" then
                 local cv = coin:FindFirstChild("CoinVisual")
                 if cv and cv.Transparency ~= 1 then
@@ -132,11 +131,10 @@ pcall(function()
             end
         end
 
-        -- Collect coin with jiggle movement
+        -- Collect coin
         if coinToCollect and char and char:FindFirstChild("HumanoidRootPart") then
             char.HumanoidRootPart.CFrame = coinToCollect.CFrame
-            task.wait(0.2) -- Short wait for teleport
-            -- Simulate jiggle movement (press W then S briefly)
+            task.wait(0.2)
             VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.W, false, game)
             task.wait(0.1)
             VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.W, false, game)
@@ -144,15 +142,14 @@ pcall(function()
             VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.S, false, game)
             task.wait(0.1)
             VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.S, false, game)
-            task.wait(0.5) -- Additional wait to ensure collection
-            char.HumanoidRootPart.CFrame = CFrame.new(-15, 140, 15)
-            print("Coin collected, total: " .. coinsCollected .. " coins")
-			task.wait(2)
+            task.wait(0.5)
+            print("[INFO] Collected a coin | Total: " .. currentCoins)
+            task.wait(2)
         else
-            char.HumanoidRootPart.CFrame = CFrame.new(-15, 140, 15)
             task.wait(0.5)
         end
     end
+
     task.spawn(function()
         loadstring(game:HttpGet('https://raw.githubusercontent.com/Linux6699/DaHubRevival/main/AntiFling.lua'))()
     end)
