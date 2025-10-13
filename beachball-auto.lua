@@ -84,6 +84,20 @@ pcall(function()
     local coinsCollected = getCoinCount()
     while true do
 
+        -- Reset character by setting health to 0 when 40 coins collected
+		coinsCollected = getCoinCount()
+        if coinsCollected >= 40 then
+            if char and char:FindFirstChild("Humanoid") then
+                char.Humanoid.Health = 0
+                print("Character reset, coin counter reset to 0")
+                -- Wait for character to respawn
+                repeat
+                    task.wait(0.5)
+                    char = plr.Character
+                until char and char:FindFirstChild("HumanoidRootPart")
+            end
+        end
+
         -- Ensure character is valid
         if not char or not char:FindFirstChild("HumanoidRootPart") then
             repeat
