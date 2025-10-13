@@ -29,7 +29,6 @@ pcall(function()
         return 0
     end
 
-    -- Disable anti-idle
     if GC then
         for _, v in pairs(GC(plr.Idled)) do
             if v.Disable then v:Disable() elseif v.Disconnect then v:Disconnect() end
@@ -42,7 +41,6 @@ pcall(function()
         end)
     end
 
-    -- Handle teleport on error
     GuiService.ErrorMessageChanged:Connect(function()
         while true do 
             local suc, err = pcall(function()
@@ -52,13 +50,11 @@ pcall(function()
         end
     end)
 
-    -- Character respawn tracking
     plr.CharacterAdded:Connect(function(newChar)
         char = newChar
         print("Character respawned, script continuing")
     end)
 
-    -- Detect map
     local map = nil
     game.Workspace.DescendantAdded:Connect(function(m)
         if m:IsA("Model") and m:GetAttribute("MapID") then
@@ -71,39 +67,19 @@ pcall(function()
         end
     end)
 
-    local afkMode = false
+    local coinsCollected = getCoinCount()
     local lastPosition = nil
+    local afkMode = false
 
     while true do
-        local currentCoins = getCoinCount()
-
-        -- Exit AFK mode when counter resets to 0
-        if afkMode and currentCoins == 0 then
-            afkMode = false
-            print("[INFO] Coin counter reset — resuming farming.")
-            task.wait(1)
-        end
-
-        -- If AFK, just chill
         if afkMode then
             task.wait(5)
-            continue
+            continue -- stay afk forever
         end
 
-        -- Save position before collecting each coin
+        -- Save last position before reaching 40
         if char and char:FindFirstChild("HumanoidRootPart") then
             lastPosition = char.HumanoidRootPart.CFrame
-        end
-
-        -- When 40 coins reached, teleport to last position + go AFK
-        if currentCoins >= 40 then
-            if lastPosition and char and char:FindFirstChild("HumanoidRootPart") then
-                char.HumanoidRootPart.CFrame = lastPosition
-                print("[INFO] 40 coins reached — returning to last position & going AFK.")
-                afkMode = true
-            end
-            task.wait(1)
-            continue
         end
 
         -- Ensure valid character
@@ -114,14 +90,14 @@ pcall(function()
             until char and char:FindFirstChild("HumanoidRootPart")
         end
 
-        -- Wait for map & coins
+        -- Wait for map and coins
         while not map or not map:FindFirstChild("CoinContainer") do
             task.wait(1)
         end
 
-        -- Find a coin
+        -- Find a coin to collect
         local coinToCollect = nil
-        for _, coin in ipairs(map.CoinContainer:GetChildren()) do
+        for _, coin in ipairs(map:FindFirstChild("CoinContainer"):GetChildren()) do
             if coin:IsA("Part") and coin.Name == "Coin_Server" and coin:GetAttribute("CoinID") == "BeachBall" then
                 local cv = coin:FindFirstChild("CoinVisual")
                 if cv and cv.Transparency ~= 1 then
@@ -143,7 +119,7 @@ pcall(function()
             task.wait(0.1)
             VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.S, false, game)
             task.wait(0.5)
-            print("[INFO] Collected a coin | Total: " .. currentCoins)
+            print("Coin collected: " .. currentCoins)
             task.wait(2)
         else
             task.wait(0.5)
