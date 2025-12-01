@@ -54,3 +54,6 @@ local function reset()
         workspace.CurrentCamera.CFrame = camCF
     end)
 end
+
+reset()
+print("RESET SCRIPT RUNNING!")
