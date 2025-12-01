@@ -35,7 +35,7 @@ function Movement.SmartWalkTo(targetPosition)
     if not hum or not root then return end
 
     print("\n------------------------------------------------")
-    print("CALCULATING PATH TO: " .. fmt(targetPosition))
+    print("CALCULATING PATH TO: " .. Movement.fmt(targetPosition))
 
     -- 1. Create a path
     local path = PathfindingService:CreatePath({
@@ -81,8 +81,8 @@ function Movement.SmartWalkTo(targetPosition)
             local diff = actualPos - targetVec
             
             print(string.format("\n[WAYPOINT %d]", i))
-            print("Target (Pathfinder): " .. fmt(targetVec))
-            print("Actual (RootPart)  : " .. fmt(actualPos))
+            print("Target (Pathfinder): " .. Movement.fmt(targetVec))
+            print("Actual (RootPart)  : " .. Movement.fmt(actualPos))
             print(string.format("Difference         : X:%.2f | Y:%.2f | Z:%.2f", diff.X, diff.Y, diff.Z))
             
             -- Explanation for the Y difference
