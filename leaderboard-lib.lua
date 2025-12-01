@@ -1,7 +1,6 @@
--- Function to get stats for specific users
--- @param targetUsernames: Table/Array of strings (e.g. {"Player1", "Player2"})
--- @return: Table (Dictionary) where Key = Username, Value = Rank Value (or nil/status string)
-local function GetSoloRanks(targetUsernames)
+local leaderboard = {}
+
+function leaderboard.GetSoloRanks(targetUsernames)
     local results = {}
 
     for _, username in pairs(targetUsernames) do
@@ -33,7 +32,7 @@ local function GetSoloRanks(targetUsernames)
 end
 
 
-local function shouldHosterLose(hosterName, joinerName)
+function leaderboard.shouldHosterLose(hosterName, joinerName)
     local usersToCheck = { hosterName, joinerName }
     
     -- Get the data struct
