@@ -14,16 +14,6 @@ end
 print("Environment Ready! Running Sequence...")
 -- Your existing functions should now be defined above this line
 
--- teleportatin support 
-local TeleportQueue = queue_on_teleport 
-if not TeleportQueue then
-    TeleportQueue = (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport)
-end
-if not TeleportQueue then
-    warn("Executor TeleportQueue function not found. Cannot queue command for next server.")
-    return
-end
-
 -- CLEAR OLD LISTENERS FIRST
 for _, connection in pairs(getconnections(game.Players.LocalPlayer.CharacterAdded)) do
     connection:Disconnect()
