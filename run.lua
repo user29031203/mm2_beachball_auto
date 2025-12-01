@@ -104,8 +104,8 @@ if MyId == 9359470613 then        -- ← CHANGE THIS TO ALT1'S USERID
     print("IM 306A2 -- HOST")
 elseif MyId == 9359433164 then    -- ← CHANGE THIS TO ALT2'S USERID 
     print("IM 306CD -- JOINER")
+	pcall(TeleportQueue, "return")
 	reset()
-	pcall(TeleportQueue, "")
 else
     print("Unknown alt - check UserIds")
 end
