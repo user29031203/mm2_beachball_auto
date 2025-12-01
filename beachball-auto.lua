@@ -67,3 +67,5 @@ function DweetLib:GetLatest()
     
     return nil, "No dweets found"
 end
+
+return DweetLib
