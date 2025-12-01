@@ -9,38 +9,42 @@ DweetLib.__index = DweetLib
 local httpRequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
 
 -- 2. Constructor
-function DweetLib.new(thingName)
-    local self = setmetatable({}, DweetLib)
-    self.ThingName = thingName
-    self.BaseUrl = "https://dweet.io"
-    return self
-end
-
--- 3. WRITE: Send Data
--- @param content: A table of data (e.g. { status = "farming", jobId = "..." })
+-- 3. WRITE: Send Data (Mimics PowerShell GET)
 function DweetLib:Send(content)
     if not httpRequest then
         return false, "Executor does not support HTTP requests"
     end
     
-    -- Ensure content is a table
-    if type(content) ~= "table" then
-        content = { value = content }
+    -- 1. Build Query String (e.g. ?JobId=123&Status=Host)
+    local queryString = ""
+    for key, value in pairs(content) do
+        local cleanKey = HttpService:UrlEncode(tostring(key))
+        local cleanValue = HttpService:UrlEncode(tostring(value))
+        
+        if queryString == "" then
+            queryString = "?" .. cleanKey .. "=" .. cleanValue
+        else
+            queryString = queryString .. "&" .. cleanKey .. "=" .. cleanValue
+        end
     end
 
-    local url = self.BaseUrl .. "/dweet/for/" .. self.ThingName
-    local jsonData = HttpService:JSONEncode(content)
-
+    local url = self.BaseUrl .. "/dweet/for/" .. self.ThingName .. queryString
+    
+    -- 2. Send Request mimicking PowerShell
     local response = httpRequest({
         Url = url,
-        Method = "POST",
-        Headers = { ["Content-Type"] = "application/json" },
-        Body = jsonData
+        Method = "GET", -- Force GET since you said curl worked without -d
+        Headers = {
+            ["User-Agent"] = "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.19041.1023",
+            ["Cache-Control"] = "no-cache"
+        }
     })
 
     if response.StatusCode == 200 then
         return true, "Sent"
     else
+        warn("Dweet Failed: " .. tostring(response.StatusCode))
+        if response.Body then print("Response: " .. tostring(response.Body)) end
         return false, "Error: " .. tostring(response.StatusCode)
     end
 end
