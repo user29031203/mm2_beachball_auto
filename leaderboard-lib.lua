@@ -58,3 +58,5 @@ function leaderboard.shouldHosterLose(hosterName, joinerName)
         return "NOT_MATCHED" 
     end
 end -- <--- This 'end' was missing in your code
+
+return leaderboard
