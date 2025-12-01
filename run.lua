@@ -1,4 +1,23 @@
 -- Wait for the character (crucial for your reset function)
+local TeleportService = game:GetService("TeleportService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local duelsPlaceId = 12360882630
+local COMMAND = "print('Hello World')" 
+local SCRIPT_LOADER_URL = "https://raw.githubusercontent.com/user29031203/mm2_beachball_auto/refs/heads/main/run.lua"
+local QUEUE_STRING = "loadstring(game:HttpGet('" .. SCRIPT_LOADER_URL .. "', true))()"
+local MyId = LocalPlayer.UserId
+
+-- teleportatin support 
+local TeleportQueue = queue_on_teleport 
+if not TeleportQueue then
+    TeleportQueue = (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport)
+end
+if not TeleportQueue then
+    warn("Executor TeleportQueue function not found. Cannot queue command for next server.")
+    return
+end
+
 if not LocalPlayer.Character then
     player.CharacterAdded:Wait()
 end
