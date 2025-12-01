@@ -1,6 +1,6 @@
 -- Wait for the character (crucial for your reset function
 if not LocalPlayer.Character then
-    player.CharacterAdded:Wait()
+    LocalPlayer.CharacterAdded:Wait()
 end
 
 print("Environment Ready! Running Sequence...")
