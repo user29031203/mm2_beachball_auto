@@ -1,5 +1,7 @@
-local hoster = "306a2"
-local joiner = "306a2e5cd_1"
+local leaderboard = {
+    local hoster = "306a2",
+    local joiner = "306a2e5cd_1"
+}
 
 -- Function to get stats for specific users
 -- @param targetUsernames: Table/Array of strings (e.g. {"Player1", "Player2"})
