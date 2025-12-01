@@ -6,6 +6,17 @@ local SCRIPT_LOADER_URL = "https://raw.githubusercontent.com/user29031203/mm2_be
 local QUEUE_STRING = "loadstring(game:HttpGet('" .. SCRIPT_LOADER_URL .. "', true))()"
 local MyId = LocalPlayer.UserId
 
+-- teleportatin support 
+local TeleportQueue = queue_on_teleport 
+if not TeleportQueue then
+    TeleportQueue = (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport)
+end
+if not TeleportQueue then
+    warn("Executor TeleportQueue function not found. Cannot queue command for next server.")
+    return
+end
+
+
 -- Wait for the character (crucial for your reset function
 if not LocalPlayer.Character then
     LocalPlayer.CharacterAdded:Wait()
@@ -94,6 +105,7 @@ if MyId == 9359470613 then        -- ← CHANGE THIS TO ALT1'S USERID
 elseif MyId == 9359433164 then    -- ← CHANGE THIS TO ALT2'S USERID 
     print("IM 306CD -- JOINER")
 	reset()
+	pcall(TeleportQueue, "")
 else
     print("Unknown alt - check UserIds")
 end
