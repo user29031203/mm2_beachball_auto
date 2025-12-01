@@ -1,4 +1,11 @@
--- Wait for the character (crucial for your reset function)
+-- Wait for the character (crucial for your reset function
+if not LocalPlayer.Character then
+    player.CharacterAdded:Wait()
+end
+
+print("Environment Ready! Running Sequence...")
+-- Your existing functions should now be defined above this line
+
 local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
@@ -16,13 +23,6 @@ if not TeleportQueue then
     warn("Executor TeleportQueue function not found. Cannot queue command for next server.")
     return
 end
-
-if not LocalPlayer.Character then
-    player.CharacterAdded:Wait()
-end
-
-print("Environment Ready! Running Sequence...")
--- Your existing functions should now be defined above this line
 
 -- CLEAR OLD LISTENERS FIRST
 for _, connection in pairs(getconnections(game.Players.LocalPlayer.CharacterAdded)) do
