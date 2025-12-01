@@ -1,6 +1,9 @@
 local PathfindingService = game:GetService("PathfindingService")
-local HosterPos = Vector3.new(196, 437, -1080)
-local JoinerPos = Vector3.new(189, 437, -1080)
+
+local Positions = {
+    HosterPos = Vector3.new(196, 437, -1080),
+    JoinerPos = Vector3.new(189, 437, -1080)
+}
 
 -- Helper function to format Vector3 strings nicely (2 decimal places)
 local function fmt(vec)
