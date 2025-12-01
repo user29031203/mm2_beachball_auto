@@ -98,14 +98,12 @@ end)
 print("--- Script Loaded ---")
 print("Queuing script command for the next server...")
 
-reset()
 -- Client Seperation
---[[if MyId == 9359470613 then        -- ← CHANGE THIS TO ALT1'S USERID
+if MyId == 9359470613 then        -- ← CHANGE THIS TO ALT1'S USERID
     print("IM 306A2 -- HOST")
-    pcall(TeleportQueue, QUEUE_STRING)
-	reset()
 elseif MyId == 9359433164 then    -- ← CHANGE THIS TO ALT2'S USERID 
     print("IM 306CD -- JOINER")
+	reset()
 else
     print("Unknown alt - check UserIds")
 end]]
