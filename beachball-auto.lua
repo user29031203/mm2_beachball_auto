@@ -9,46 +9,46 @@ DweetLib.__index = DweetLib
 local httpRequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
 
 -- 2. Constructor
--- 3. WRITE: Send Data (Mimics PowerShell GET)
+-- 3. WRITE: Send Data (Mimicking Curl)
 function DweetLib:Send(content)
     if not httpRequest then
         return false, "Executor does not support HTTP requests"
     end
     
-    -- 1. Build Query String (e.g. ?JobId=123&Status=Host)
-    local queryString = ""
+    local url = self.BaseUrl .. "/dweet/for/" .. self.ThingName
+
+    -- CONVERT TABLE TO FORM DATA STRING (Key=Value&Key2=Value2)
+    -- This matches how 'curl -d' sends data by default
+    local formBody = ""
     for key, value in pairs(content) do
         local cleanKey = HttpService:UrlEncode(tostring(key))
         local cleanValue = HttpService:UrlEncode(tostring(value))
-        
-        if queryString == "" then
-            queryString = "?" .. cleanKey .. "=" .. cleanValue
-        else
-            queryString = queryString .. "&" .. cleanKey .. "=" .. cleanValue
-        end
+        formBody = formBody .. cleanKey .. "=" .. cleanValue .. "&"
     end
+    -- Remove the trailing "&"
+    formBody = formBody:sub(1, -2)
 
-    local url = self.BaseUrl .. "/dweet/for/" .. self.ThingName .. queryString
-    
-    -- 2. Send Request mimicking PowerShell
     local response = httpRequest({
         Url = url,
-        Method = "GET", -- Force GET since you said curl worked without -d
+        Method = "POST",
         Headers = {
-            ["User-Agent"] = "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.19041.1023",
-            ["Cache-Control"] = "no-cache"
-        }
+            -- Tell Dweet we are sending Form Data, just like Curl
+            ["Content-Type"] = "application/x-www-form-urlencoded",
+            
+            -- Spoof the User-Agent to look like Curl (Bypasses some filters)
+            ["User-Agent"] = "curl/7.68.0" 
+        },
+        Body = formBody
     })
 
     if response.StatusCode == 200 then
         return true, "Sent"
     else
-        warn("Dweet Failed: " .. tostring(response.StatusCode))
-        if response.Body then print("Response: " .. tostring(response.Body)) end
+        -- Print the actual error message from Dweet to help debug
+        warn("Dweet Error Body: " .. tostring(response.Body))
         return false, "Error: " .. tostring(response.StatusCode)
     end
 end
-
 -- 4. READ: Get Latest Data
 -- @return: The content table (or nil if failed/empty)
 function DweetLib:GetLatest()
