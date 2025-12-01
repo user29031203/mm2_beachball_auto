@@ -1,8 +1,3 @@
-local leaderboard = {
-    local hoster = "306a2",
-    local joiner = "306a2e5cd_1"
-}
-
 -- Function to get stats for specific users
 -- @param targetUsernames: Table/Array of strings (e.g. {"Player1", "Player2"})
 -- @return: Table (Dictionary) where Key = Username, Value = Rank Value (or nil/status string)
