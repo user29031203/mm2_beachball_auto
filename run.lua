@@ -3,7 +3,6 @@ local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local duelsPlaceId = 12360882630
-local COMMAND = "print('Hello World')" 
 local SCRIPT_LOADER_URL = "https://raw.githubusercontent.com/user29031203/mm2_beachball_auto/refs/heads/main/run.lua"
 local QUEUE_STRING = "loadstring(game:HttpGet('" .. SCRIPT_LOADER_URL .. "', true))()"
 local MyId = LocalPlayer.UserId
@@ -74,5 +73,38 @@ local function reset()
     end)
 end
 
-reset()
-print("RESET SCRIPT RUNNING!")
+LocalPlayer.CharacterAdded:Connect(function(char)
+    -- We wait for the humanoid to exist
+    local hum = char:WaitForChild("Humanoid", 10)
+    local root = char:WaitForChild("HumanoidRootPart", 10)
+
+    -- CHECK: If the character is already dead, it's the old one. Ignore it.
+    if hum and hum.Health <= 0 then
+        return 
+    end
+
+    if root and hum then
+        print("RESPAWNED — FULLY LOADED & ALIVE (HP:", hum.Health, ")")
+        -- do the method
+        task.wait(0.1)
+        JoinRandomServer(duelsPlaceId)
+		Connect:Disconnect()
+    else
+        warn("Respawn failed or character missing parts")
+		Connect:Disconnect()
+    end
+end)
+
+print("--- Script Loaded ---")
+print("Queuing script command for the next server...")
+
+-- Client Seperation
+if MyId == 9359470613 then        -- ← CHANGE THIS TO ALT1'S USERID
+    print("IM 306A2 -- HOST")
+    pcall(TeleportQueue, QUEUE_STRING)
+	print("READY FOR TP!")
+elseif MyId == 9359433164 then    -- ← CHANGE THIS TO ALT2'S USERID 
+    print("IM 306CD -- JOINER")
+else
+    print("Unknown alt - check UserIds")
+end
