@@ -1,3 +1,4 @@
+local Players = game:GetService("Players")
 local Leaderboard = {}
 
 function Leaderboard.GetSoloRanks(targetUsernames)
@@ -36,7 +37,7 @@ function Leaderboard.shouldHosterLose(hosterName, joinerName)
     local usersToCheck = { hosterName, joinerName }
     
     -- Get the data struct
-    local playerStats = GetSoloRanks(usersToCheck)
+    local playerStats = Leaderboard.GetSoloRanks(usersToCheck)
     
     local hostRank = playerStats[hosterName]
     local joinerRank = playerStats[joinerName]
