@@ -1,6 +1,6 @@
-local leaderboard = {}
+local Leaderboard = {}
 
-function leaderboard.GetSoloRanks(targetUsernames)
+function Leaderboard.GetSoloRanks(targetUsernames)
     local results = {}
 
     for _, username in pairs(targetUsernames) do
@@ -32,7 +32,7 @@ function leaderboard.GetSoloRanks(targetUsernames)
 end
 
 
-function leaderboard.shouldHosterLose(hosterName, joinerName)
+function Leaderboard.shouldHosterLose(hosterName, joinerName)
     local usersToCheck = { hosterName, joinerName }
     
     -- Get the data struct
@@ -59,4 +59,4 @@ function leaderboard.shouldHosterLose(hosterName, joinerName)
     end
 end -- <--- This 'end' was missing in your code
 
-return leaderboard
+return Leaderboard
