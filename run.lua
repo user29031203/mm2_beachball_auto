@@ -106,4 +106,4 @@ elseif MyId == 9359433164 then    -- ← CHANGE THIS TO ALT2'S USERID
 	reset()
 else
     print("Unknown alt - check UserIds")
-end]]
+end
