@@ -1,11 +1,3 @@
--- Wait for the character (crucial for your reset function
-if not LocalPlayer.Character then
-    LocalPlayer.CharacterAdded:Wait()
-end
-
-print("Environment Ready! Running Sequence...")
--- Your existing functions should now be defined above this line
-
 local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
@@ -13,6 +5,14 @@ local duelsPlaceId = 12360882630
 local SCRIPT_LOADER_URL = "https://raw.githubusercontent.com/user29031203/mm2_beachball_auto/refs/heads/main/run.lua"
 local QUEUE_STRING = "loadstring(game:HttpGet('" .. SCRIPT_LOADER_URL .. "', true))()"
 local MyId = LocalPlayer.UserId
+
+-- Wait for the character (crucial for your reset function
+if not LocalPlayer.Character then
+    LocalPlayer.CharacterAdded:Wait()
+end
+
+print("Environment Ready! Running Sequence...")
+-- Your existing functions should now be defined above this line
 
 -- teleportatin support 
 local TeleportQueue = queue_on_teleport 
