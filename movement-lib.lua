@@ -1,18 +1,17 @@
 local PathfindingService = game:GetService("PathfindingService")
-
-local Positions = {
+local Movement = {
     HosterPos = Vector3.new(196, 437, -1080),
     JoinerPos = Vector3.new(189, 437, -1080)
 }
 
 -- Helper function to format Vector3 strings nicely (2 decimal places)
-local function fmt(vec)
+function Movement.fmt(vec)
     return string.format("(%.2f, %.2f, %.2f)", vec.X, vec.Y, vec.Z)
 end
 
 -- 1. THE DEBUGGER (Runs in background)
 -- Displays position in console (F9) every 1 second
-local function StartPositionDebug()
+function Movement.StartPositionDebug()
     task.spawn(function()
         while true do
             task.wait(1) -- Update every 1 second
@@ -28,7 +27,7 @@ local function StartPositionDebug()
 end
 
 
-local function SmartWalkTo(targetPosition)
+function Movement.SmartWalkTo(targetPosition)
     local char = LocalPlayer.Character
     local hum = char:FindFirstChild("Humanoid")
     local root = char:FindFirstChild("HumanoidRootPart")
@@ -98,3 +97,4 @@ local function SmartWalkTo(targetPosition)
     end
 end
 
+return Movement
