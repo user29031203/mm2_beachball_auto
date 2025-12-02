@@ -29,4 +29,6 @@ local function CheckAndHandleMatching()
     return false
 end
 
+pcall(TeleportQueue, "return")
 CheckAndHandleMatching()
+
