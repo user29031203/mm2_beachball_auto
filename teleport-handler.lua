@@ -85,11 +85,6 @@ local function characterChecker()
     end)
 end 
 
--- method executor
-if not LocalPlayer.Character then
-    LocalPlayer.CharacterAdded:Wait()
-end
-
 -- Wait for leaderstats to appear on LocalPlayer (with 10 sec timeout)
 local leaderstats = LocalPlayer:WaitForChild("leaderstats", generalTimeout)
 
@@ -98,6 +93,7 @@ if leaderstats then
     local status = LeaderboardApi.IsDuoMatched(altsInfo.hosterName, altsInfo.joinerName)
     -- true was status, it changed to true for testing purposes only
     if status then
+        -- do method
         if not LocalPlayer.Character then
             LocalPlayer.CharacterAdded:Wait()
         end
