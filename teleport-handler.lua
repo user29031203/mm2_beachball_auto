@@ -115,7 +115,7 @@ local leaderstats = LocalPlayer:WaitForChild("leaderstats", 10)
 
 if leaderstats then
     print("leaderstats loaded — checking duo status...")
-    local status = LeaderboardApi.isDuoMatched(altsInfo.hosterName, altsInfo.joinerName)
+    local status = LeaderboardApi.IsDuoMatched(altsInfo.hosterName, altsInfo.joinerName)
     -- true was status, it changed to true for testing purposes only
     if true then
         characterChecker()
