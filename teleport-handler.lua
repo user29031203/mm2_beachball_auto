@@ -94,6 +94,7 @@ local function characterChecker()
             ServerManager.JoinRandomServer()
             Connect:Disconnect()
         else
+            ServerManager.JoinRandomServer()
             warn("Respawn failed or character missing parts")
             Connect:Disconnect()
         end
