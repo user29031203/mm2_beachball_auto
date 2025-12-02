@@ -91,6 +91,7 @@ local function characterChecker()
         if root and hum then
             print("RESPAWNED — FULLY LOADED & ALIVE (HP:", hum.Health, ")")
             -- do the method
+            reset()
             task.wait(0.1)
             ServerManager.JoinRandomServer()
             Connect:Disconnect()
