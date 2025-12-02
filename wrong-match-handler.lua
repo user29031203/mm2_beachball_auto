@@ -1,5 +1,17 @@
-local leaderstats = LocalPlayer:WaitForChild("leaderstats", generalTimeout)
-local function RejoinIfNoDuo()
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local CONS_INFO_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/constants.lua" 
+local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
+
+local ServerApi = loadstring(game:HttpGet(CONS_INFO.SERVER_MANAGER_URL))()
+local LeaderboardApi = loadstring(game:HttpGet(CONS_INFO.LEADERBOARD_LIB_URL))()
+
+WrongMatchHandler = {}
+
+function WrongMatchHandler.RejoinIfNoDuo()
+    local leaderstats = LocalPlayer:WaitForChild("leaderstats", generalTimeout)
+    
     if leaderstats then
         print("leaderstats loaded — checking duo status...")
         local status = LeaderboardApi.IsDuoMatched(altsInfo.hosterName, altsInfo.joinerName)
@@ -16,3 +28,5 @@ local function RejoinIfNoDuo()
         ServerApi.JoinRandomServer()
     end
 end
+
+return 
