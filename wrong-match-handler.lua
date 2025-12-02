@@ -43,6 +43,7 @@ if MyId == CONS_INFO.joinerId then
     local WrongMatchRejoiner = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL .. "'))()"  
     pcall(TeleportQueue, WrongMatchRejoiner)
 else
+    print("hoster joining back to lobby stabily")
     pcall(TeleportQueue, "return")
 end
 
