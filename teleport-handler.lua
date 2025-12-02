@@ -11,6 +11,8 @@ local altsInfo = {
     joinerId = 9359433164 -- CD
 }
 
+local generalTimeout = 3
+
 local TELEPORT_HANDLER_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/teleport-handler.lua"
 local QUEUE_STRING = "loadstring(game:HttpGet('" .. TELEPORT_HANDLER_URL .. "'))()"
 
@@ -79,8 +81,8 @@ local CODE = [[
 local function characterChecker() 
     LocalPlayer.CharacterAdded:Connect(function(char)
         -- We wait for the humanoid to exist
-        local hum = char:WaitForChild("Humanoid", 10)
-        local root = char:WaitForChild("HumanoidRootPart", 10)
+        local hum = char:WaitForChild("Humanoid", generalTimeout)
+        local root = char:WaitForChild("HumanoidRootPart", generalTimeout)
 
         -- CHECK: If the character is already dead, it's the old one. Ignore it.
         if hum and hum.Health <= 0 then
@@ -103,7 +105,7 @@ end
 
 
 -- Wait for leaderstats to appear on LocalPlayer (with 10 sec timeout)
-local leaderstats = LocalPlayer:WaitForChild("leaderstats", 5)
+local leaderstats = LocalPlayer:WaitForChild("leaderstats", generalTimeout)
 
 if leaderstats then
     print("leaderstats loaded — checking duo status...")
