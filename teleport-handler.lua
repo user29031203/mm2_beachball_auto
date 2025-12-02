@@ -104,6 +104,7 @@ if leaderstats then
         reset()
         characterChecker()
     else 
+        print("Matched with a random!")
         ServerApi.JoinRandomServer()
     end
 else
