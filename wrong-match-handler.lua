@@ -27,6 +27,8 @@ function WrongMatchHandler.CheckAndHandleMatching()
         task.wait(0.1)
         ServerApi.JoinRandomServer()
     end
+
+    return false
 end
 
-return 
+return WrongMatchHandler
