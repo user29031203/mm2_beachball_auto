@@ -1,5 +1,7 @@
 local Players = game:GetService("Players")
-local Leaderboard = {}
+local Leaderboard = {
+    NotMatched = "NOT_MATCHED"
+}
 
 function Leaderboard.GetSoloRanks(targetUsernames)
     local results = {}
@@ -56,8 +58,14 @@ function Leaderboard.shouldHosterLose(hosterName, joinerName)
         warn("Host Status:", hostRank, " | Joiner Status:", joinerRank)
         
         -- Return a default value (e.g., false) so script continues safely
-        return "NOT_MATCHED" 
+        return Leaderboard.NotMatched
     end
 end -- <--- This 'end' was missing in your code
+
+
+function Leaderboard.isDuoMatched()
+    return if shouldHosterLose() == Leaderboard.NotMatched then true else falses
+end
+
 
 return Leaderboard
