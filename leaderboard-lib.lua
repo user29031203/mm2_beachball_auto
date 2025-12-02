@@ -64,7 +64,7 @@ end -- <--- This 'end' was missing in your code
 
 
 function Leaderboard.IsDuoMatched(hosterName, joinerName)
-    return if Leaderboard.shouldHosterLose(hosterName, joinerName) == Leaderboard.NotMatched then false else true
+    return if Leaderboard.ShouldHosterLose(hosterName, joinerName) == Leaderboard.NotMatched then false else true
 end
     
 return Leaderboard
