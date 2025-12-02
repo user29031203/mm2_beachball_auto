@@ -77,7 +77,6 @@ local CODE = [[
 -- character load and wait func
 
 local function characterChecker() 
-    -- Character load and wait 
     LocalPlayer.CharacterAdded:Connect(function(char)
         -- We wait for the humanoid to exist
         local hum = char:WaitForChild("Humanoid", 10)
@@ -91,17 +90,14 @@ local function characterChecker()
         if root and hum then
             print("RESPAWNED — FULLY LOADED & ALIVE (HP:", hum.Health, ")")
             -- do the method
-            reset()
             task.wait(0.1)
-            ServerManager.JoinRandomServer()
+            JoinRandomServer()
             Connect:Disconnect()
         else
             warn("Respawn failed or character missing parts")
-            ServerManager.JoinRandomServer()
             Connect:Disconnect()
         end
     end)
-    return true
 end 
 
 
@@ -118,6 +114,10 @@ if leaderstats then
     local status = LeaderboardApi.IsDuoMatched(altsInfo.hosterName, altsInfo.joinerName)
     -- true was status, it changed to true for testing purposes only
     if true then
+        if not LocalPlayer.Character then
+            LocalPlayer.CharacterAdded:Wait()
+        end
+        reset()
         characterChecker()
     else 
         ServerManager.JoinRandomServer()
