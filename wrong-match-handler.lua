@@ -27,6 +27,5 @@ local function CheckAndHandleMatching()
     end
 end
 
-pcall(TeleportQueue, "return")
 CheckAndHandleMatching()
 
