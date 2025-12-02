@@ -46,7 +46,10 @@ end
 CheckAndHandleMatching()
 
 local status = LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName)
+print(status)
+
 if not status then
+    print(MyId)
     if MyId == CONS_INFO.joinerId then
         -- share jobid via dweetr then join to hoster 
         print("DEBUGGER A1")
