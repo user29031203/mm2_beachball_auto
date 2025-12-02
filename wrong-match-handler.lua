@@ -39,21 +39,10 @@ local function CheckAndHandleMatching()
     end
 end
 
-local function shareJobId() 
-    ---
+if MyId == CONS_INFO.joinerId then
+    local WrongMatchHandler = loadstring(game:HttpGet(CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL))
+    pcall(TeleportQueue, WrongMatchHandler)
 end
 
 CheckAndHandleMatching()
-
-local status = LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName)
-print(status)
-
-if not status then
-    print(MyId)
-    if MyId == CONS_INFO.joinerId then
-        -- share jobid via dweetr then join to hoster 
-        print("DEBUGGER A1")
-    end
-end
-
 pcall(TeleportQueue, "return")
