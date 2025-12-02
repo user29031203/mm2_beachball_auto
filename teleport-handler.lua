@@ -122,6 +122,7 @@ else
     ServerApi.JoinRandomServer()
 end
 
+print("asdasdsadsad")
 reset()
 haracterChecker()
 
