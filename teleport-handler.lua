@@ -103,7 +103,7 @@ end
 
 
 -- Wait for leaderstats to appear on LocalPlayer (with 10 sec timeout)
-local leaderstats = LocalPlayer:WaitForChild("leaderstats", 10)
+local leaderstats = LocalPlayer:WaitForChild("leaderstats", 5)
 
 if leaderstats then
     print("leaderstats loaded — checking duo status...")
