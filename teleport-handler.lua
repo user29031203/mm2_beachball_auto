@@ -102,11 +102,6 @@ local function characterChecker()
 end 
 
 
--- Leaderboard load and wait
-status = LeaderboardApi.IsDuoMatched(altsInfo.hosterName, altsInfo.joinerName)
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
 -- Wait for leaderstats to appear on LocalPlayer (with 10 sec timeout)
 local leaderstats = LocalPlayer:WaitForChild("leaderstats", 10)
 
