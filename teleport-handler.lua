@@ -92,11 +92,11 @@ local function characterChecker()
             -- do the method
             task.wait(0.1)
             ServerManager.JoinRandomServer()
-            Connect:Disconnect()
+            --Connect:Disconnect()
         else
             ServerManager.JoinRandomServer()
             warn("Respawn failed or character missing parts")
-            Connect:Disconnect()
+            --Connect:Disconnect()
         end
     end)
 end 
@@ -128,3 +128,5 @@ else
     task.wait(0.1)
     ServerManager.JoinRandomServer()
 end
+
+pcall(TeleportQueue, "return")
