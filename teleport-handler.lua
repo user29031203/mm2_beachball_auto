@@ -13,18 +13,15 @@ local altsInfo = {
 
 local generalTimeout = 10
 
-local TELEPORT_HANDLER_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/teleport-handler.lua"
-local QUEUE_STRING = "loadstring(game:HttpGet('" .. TELEPORT_HANDLER_URL .. "'))()"
+-- local TELEPORT_HANDLER_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/teleport-handler.lua"
+-- local QUEUE_STRING = "loadstring(game:HttpGet('" .. TELEPORT_HANDLER_URL .. "'))()"
 
-local DWEETR_LIB_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/dweetr-lib.lua" -- Make sure this matches your github link
-local DweetLib = loadstring(game:HttpGet(DWEETR_LIB_URL))()
-local Comm = DweetLib.new(mySecretKey)
+-- local DWEETR_LIB_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/dweetr-lib.lua" -- Make sure this matches your github link
+-- local DweetLib = loadstring(game:HttpGet(DWEETR_LIB_URL))()
+-- local Comm = DweetLib.new(mySecretKey)
 
 -- local LEADERBOARD_LIB_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/leaderboard-lib.lua"
 -- local LeaderboardApi = loadstring(game:HttpGet(LEADERBOARD_LIB_URL))()
-
-local MOVEMENT_LIB_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/movement-lib.lua"
-local MovementApi = loadstring(game:HttpGet(MOVEMENT_LIB_URL))()
 
 local SERVER_MANAGER_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/server-manager.lua"
 local ServerApi = loadstring(game:HttpGet(SERVER_MANAGER_URL))()
@@ -61,21 +58,6 @@ local function reset()
     end)]]
 end
 
--- Lobby matcher
-local newCodeArgs = {}
-
-local argString = ""
-for i, v in pairs(newCodeArgs) do
-    if type(v) == "string" then v = '"'..v..'"' end
-    argString = argString .. (i>1 and ", " or "") .. tostring(v)
-end
-
-local CODE = [[
-    local args = {]]..argString..[[}
-    print("Teleported with args:", table.unpack(args))
-    -- use args[1], args[2], etc.
-]]
-
 -- character load and wait func
 
 local function characterChecker() 
@@ -92,7 +74,7 @@ local function characterChecker()
         if root and hum then
             print("RESPAWNED — FULLY LOADED & ALIVE (HP:", hum.Health, ")")
             -- do the method
-            task.wait(0.1)
+            -- task.wait(0.1)
             ServerApi.JoinRandomServer()
             --Connect:Disconnect()
         else
