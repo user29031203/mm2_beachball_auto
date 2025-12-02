@@ -11,7 +11,7 @@ local altsInfo = {
     joinerId = 9359433164 -- CD
 }
 
-local generalTimeout = 3
+local generalTimeout = 10
 
 local TELEPORT_HANDLER_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/teleport-handler.lua"
 local QUEUE_STRING = "loadstring(game:HttpGet('" .. TELEPORT_HANDLER_URL .. "'))()"
@@ -103,9 +103,15 @@ local function characterChecker()
     end)
 end 
 
+-- method executor
+if not LocalPlayer.Character then
+    LocalPlayer.CharacterAdded:Wait()
+end
+reset()
+characterChecker()
 
 -- Wait for leaderstats to appear on LocalPlayer (with 10 sec timeout)
-local leaderstats = LocalPlayer:WaitForChild("leaderstats", generalTimeout)
+--[[ local leaderstats = LocalPlayer:WaitForChild("leaderstats", generalTimeout)
 
 if leaderstats then
     print("leaderstats loaded — checking duo status...")
@@ -115,8 +121,6 @@ if leaderstats then
         if not LocalPlayer.Character then
             LocalPlayer.CharacterAdded:Wait()
         end
-        reset()
-        characterChecker()
     else 
         ServerApi.JoinRandomServer()
     end
@@ -124,6 +128,6 @@ else
     warn("leaderstats NEVER loaded → Hopping anyway (safe fallback)")
     task.wait(0.1)
     ServerApi.JoinRandomServer()
-end
+end ]]
 
 pcall(TeleportQueue, "return")
