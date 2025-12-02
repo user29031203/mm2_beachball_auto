@@ -114,7 +114,7 @@ if leaderstats then
     print("leaderstats loaded — checking duo status...")
     local status = LeaderboardApi.IsDuoMatched(altsInfo.hosterName, altsInfo.joinerName)
     -- true was status, it changed to true for testing purposes only
-    if true then
+    if status then
         if not LocalPlayer.Character then
             LocalPlayer.CharacterAdded:Wait()
         end
