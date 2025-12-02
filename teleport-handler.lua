@@ -113,8 +113,6 @@ if leaderstats then
         --[[if not LocalPlayer.Character then
             LocalPlayer.CharacterAdded:Wait()
         end]]
-        reset()
-        characterChecker()
     else 
         ServerApi.JoinRandomServer()
     end
@@ -124,4 +122,8 @@ else
     ServerApi.JoinRandomServer()
 end
 
+reset()
+haracterChecker()
+
 pcall(TeleportQueue, "return")
+
