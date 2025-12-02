@@ -1,9 +1,11 @@
 local Players = game:GetService("Players")
 local Leaderboard = {
-    NotMatched = "NOT_MATCHED"
+    NotMatched = "NOT_MATCHED",
+    lobbyColumnName = "Solo Rank",
+    duelColumnName = "Rank"
 }
 
-function Leaderboard.GetSoloRanks(targetUsernames)
+function Leaderboard.GetRanks(targetUsernames)
     local results = {}
 
     for _, username in pairs(targetUsernames) do
@@ -16,13 +18,16 @@ function Leaderboard.GetSoloRanks(targetUsernames)
             
             -- 3. Look for the specific "Solo Rank" value
             -- We use FindFirstChild because the name has a space in it
-            local soloRankStat = stats and stats:FindFirstChild("Solo Rank")
+            local lobbyRankStat = stats and stats:FindFirstChild(Leaderboard.lobbyColumnName) -- WAITING UpdATE
+            local duelRankStat = stats and stats:FindFirstChild(leaderboard.duelColumnName)
 
-            if soloRankStat then
+            if lobbyRankStat then
                 -- Success: Store the value (number or string)
-                results[username] = soloRankStat.Value
-            else
+                results[username] = lobbyRankStat.Value
+            else if duelRankStat then
                 -- Player exists, but stats haven't loaded or stat name is wrong
+                results[username] = duelRankStat.Value
+            else
                 results[username] = "Stat Not Found"
             end
         else
@@ -39,7 +44,7 @@ function Leaderboard.ShouldHosterLose(hosterName, joinerName)
     local usersToCheck = { hosterName, joinerName }
     
     -- Get the data struct
-    local playerStats = Leaderboard.GetSoloRanks(usersToCheck)
+    local playerStats = Leaderboard.GetRanks(usersToCheck)
     
     local hostRank = playerStats[hosterName]
     local joinerRank = playerStats[joinerName]
