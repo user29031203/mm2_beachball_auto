@@ -7,7 +7,7 @@ local CONS_INFO_URL = "https://raw.githubusercontent.com/user29031203/LegendZero
 local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
 
 -- external libs 
-local ServerApi = loadstring(game:HttpGet(CONS_INFO.SERVER_MANAGER_URL))()
+local ServerApi = loadstring(game:HttpGet(CONS_INFO.URLS.SERVER_MANAGER_URL))()
 
 -- teleportatin support 
 local TeleportQueue = queue_on_teleport 
@@ -68,7 +68,7 @@ local function characterChecker()
     end)
 end 
 
-local WrongMatchHandler = loadstring(game:HttpGet(CONS_INFO.WRONG_MATCH_HANDLER_URL))
+local WrongMatchHandler = loadstring(game:HttpGet(CONS_INFO.URLS.WRONG_MATCH_HANDLER_URL))
 if WrongMatchHandler then
     reset()
     characterChecker()
