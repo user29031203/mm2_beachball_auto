@@ -6,8 +6,8 @@ local MyId = LocalPlayer.UserId
 local altsInfo = {
     hosterName = "306a2e5cd_2",
     joinerName = "306a2e5cd_1",
-    hosterId = "9359470613", -- A2
-    joinerId = "9359433164" -- CD
+    hosterId = 9359470613, -- A2
+    joinerId = 9359433164 -- CD
 }
 
 local TELEPORT_HANDLER_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/teleport-handler.lua"
