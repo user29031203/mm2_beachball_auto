@@ -18,8 +18,8 @@ function Leaderboard.GetRanks(targetUsernames)
             
             -- 3. Look for the specific "Solo Rank" value
             -- We use FindFirstChild because the name has a space in it
-            local lobbyRankStat = stats and stats:FindFirstChild(Leaderboard.lobbyColumnName) -- WAITING UpdATE
-            local duelRankStat = stats and stats:FindFirstChild(leaderboard.duelColumnName)
+            local lobbyRankStat = stats and Leaderboard.lobbyColumnName and stats:FindFirstChild(Leaderboard.lobbyColumnName)
+            local duelRankStat  = stats and Leaderboard.duelColumnName  and stats:FindFirstChild(Leaderboard.duelColumnName)
 
             if lobbyRankStat then
                 -- Success: Store the value (number or string)
