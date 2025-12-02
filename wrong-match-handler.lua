@@ -12,7 +12,7 @@ local function CheckAndHandleMatching()
     
     if leaderstats then
         print("leaderstats loaded — checking duo status...")
-        local status = LeaderboardApi.IsDuoMatched(altsInfo.hosterName, altsInfo.joinerName)
+        local status = LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName)
         -- true was status, it changed to true for testing purposes only
         if status then
             return true
