@@ -40,10 +40,10 @@ local function CheckAndHandleMatching()
 end
 
 if MyId == CONS_INFO.joinerId then
-    local WrongMatchRejoiner = loadstring(game:HttpGet(CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL))
+    local WrongMatchRejoiner = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL .. "'))()"  
     pcall(TeleportQueue, WrongMatchRejoiner)
-    CheckAndHandleMatching()
 else
     pcall(TeleportQueue, "return")
-    CheckAndHandleMatching()
 end
+
+CheckAndHandleMatching()
