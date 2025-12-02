@@ -91,7 +91,7 @@ local function characterChecker()
             print("RESPAWNED — FULLY LOADED & ALIVE (HP:", hum.Health, ")")
             -- do the method
             task.wait(0.1)
-            JoinRandomServer()
+            ServerManager.JoinRandomServer()
             Connect:Disconnect()
         else
             warn("Respawn failed or character missing parts")
