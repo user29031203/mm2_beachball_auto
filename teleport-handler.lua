@@ -2,6 +2,7 @@ local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local MyId = LocalPlayer.UserId
+local mySecretKey = "21bdef3f9b5a7e65db63ea9ac3d9f34a"
 
 local altsInfo = {
     hosterName = "306a2e5cd_2",
@@ -15,7 +16,7 @@ local QUEUE_STRING = "loadstring(game:HttpGet('" .. TELEPORT_HANDLER_URL .. "'))
 
 local DWEETR_LIB_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/dweetr-lib.lua" -- Make sure this matches your github link
 local DweetLib = loadstring(game:HttpGet(DWEETR_LIB_URL))()
-local Comm = DweetLib.new(mySecretKey)]]
+local Comm = DweetLib.new(mySecretKey)
 
 local LEADERBOARD_LIB_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/leaderboard-lib.lua"
 local LeaderboardApi = loadstring(game:HttpGet(LEADERBOARD_LIB_URL))()
