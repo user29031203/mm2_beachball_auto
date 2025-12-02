@@ -63,8 +63,8 @@ function Leaderboard.shouldHosterLose(hosterName, joinerName)
 end -- <--- This 'end' was missing in your code
 
 
-function Leaderboard.isDuoMatched()
-    return if shouldHosterLose() == Leaderboard.NotMatched then true else false
+function Leaderboard.isDuoMatched(hosterName, joinerName)
+    return if Leaderboard.shouldHosterLose(hosterName, joinerName) == Leaderboard.NotMatched then true else false
 end
     
 return Leaderboard
