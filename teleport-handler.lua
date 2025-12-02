@@ -110,9 +110,9 @@ if leaderstats then
     local status = LeaderboardApi.IsDuoMatched(altsInfo.hosterName, altsInfo.joinerName)
     -- true was status, it changed to true for testing purposes only
     if status then
-        if not LocalPlayer.Character then
+        --[[if not LocalPlayer.Character then
             LocalPlayer.CharacterAdded:Wait()
-        end
+        end]]
         reset()
         characterChecker()
     else 
