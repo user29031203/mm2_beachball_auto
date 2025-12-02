@@ -1,4 +1,6 @@
 local PathfindingService = game:GetService("PathfindingService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
 local Movement = {
     HosterPos = Vector3.new(196, 437, -1080),
     JoinerPos = Vector3.new(189, 437, -1080)
