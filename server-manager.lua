@@ -13,11 +13,11 @@ function ServerManager.getCurrentServerInfo()
     }
 end
 
-function ServerManager.JoinServerById(placeId: number, jobId: string)
+function ServerManager.JoinServerById(number, string)
     TeleportService:TeleportToPlaceInstance(placeId, jobId, LocalPlayer)
 end
 
-function ServerManager.JoinRandomServer(placeId: number?)
+function ServerManager.JoinRandomServer(number)
     placeId = placeId or ServerManager.duelsPlaceId
     TeleportService:Teleport(placeId, LocalPlayer)
 end
