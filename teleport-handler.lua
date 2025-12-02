@@ -2,29 +2,12 @@ local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local MyId = LocalPlayer.UserId
-local mySecretKey = "21bdef3f9b5a7e65db63ea9ac3d9f34a"
 
-local altsInfo = {
-    hosterName = "306a2e5cd_2",
-    joinerName = "306a2e5cd_1",
-    hosterId = 9359470613, -- A2
-    joinerId = 9359433164 -- CD
-}
+local CONS_INFO_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/constants.lua" 
+local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
 
-local generalTimeout = 10
-
--- local TELEPORT_HANDLER_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/teleport-handler.lua"
--- local QUEUE_STRING = "loadstring(game:HttpGet('" .. TELEPORT_HANDLER_URL .. "'))()"
-
--- local DWEETR_LIB_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/dweetr-lib.lua" -- Make sure this matches your github link
--- local DweetLib = loadstring(game:HttpGet(DWEETR_LIB_URL))()
--- local Comm = DweetLib.new(mySecretKey)
-
-local LEADERBOARD_LIB_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/leaderboard-lib.lua"
-local LeaderboardApi = loadstring(game:HttpGet(LEADERBOARD_LIB_URL))()
-
-local SERVER_MANAGER_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/server-manager.lua"
-local ServerApi = loadstring(game:HttpGet(SERVER_MANAGER_URL))()
+-- external libs 
+local ServerApi = loadstring(game:HttpGet(CONS_INFO.SERVER_MANAGER_URL))()
 
 -- teleportatin support 
 local TeleportQueue = queue_on_teleport 
@@ -63,8 +46,8 @@ end
 local function characterChecker() 
     LocalPlayer.CharacterAdded:Connect(function(char)
         -- We wait for the humanoid to exist
-        local hum = char:WaitForChild("Humanoid", generalTimeout)
-        local root = char:WaitForChild("HumanoidRootPart", generalTimeout)
+        local hum = char:WaitForChild("Humanoid", CONS_INFO.generalTimeout)
+        local root = char:WaitForChild("HumanoidRootPart", CONS_INFO.generalTimeout)
 
         -- CHECK: If the character is already dead, it's the old one. Ignore it.
         if hum and hum.Health <= 0 then
@@ -74,7 +57,7 @@ local function characterChecker()
         if root and hum then
             print("RESPAWNED — FULLY LOADED & ALIVE (HP:", hum.Health, ")")
             -- do the method
-            -- task.wait(0.1)
+            task.wait()
             ServerApi.JoinRandomServer()
             --Connect:Disconnect()
         else
@@ -85,29 +68,10 @@ local function characterChecker()
     end)
 end 
 
--- Wait for leaderstats to appear on LocalPlayer (with 10 sec timeout)
-local leaderstats = LocalPlayer:WaitForChild("leaderstats", generalTimeout)
-
-if leaderstats then
-    print("leaderstats loaded — checking duo status...")
-    local status = LeaderboardApi.IsDuoMatched(altsInfo.hosterName, altsInfo.joinerName)
-    -- true was status, it changed to true for testing purposes only
-    if true then
-        -- do method
-        if not LocalPlayer.Character then
-            LocalPlayer.CharacterAdded:Wait()
-        end
-        reset()
-        characterChecker()
-    else 
-        print("Matched with a random!")
-        ServerApi.JoinRandomServer()
-    end
-else
-    warn("leaderstats NEVER loaded → Hopping anyway (safe fallback)")
-    task.wait(0.1)
-    ServerApi.JoinRandomServer()
+local WrongMatchHandler = loadstring(game:HttpGet(CONS_INFO.WRONG_MATCH_HANDLER_URL))
+if WrongMatchHandler then
+    reset()
+    characterChecker()
 end
-
 
 pcall(TeleportQueue, "return")
