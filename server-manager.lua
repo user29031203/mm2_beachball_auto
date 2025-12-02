@@ -6,10 +6,6 @@ ServerManager = {
     duelsPlaceId = 12360882630
 }
 
-function ServerManager.JoinServerById(player: Player, placeId: number, jobId: string)
-    TeleportService:TeleportToPlaceInstance(placeId, jobId, player)
-end
-
 -- Function to get the current server's PlaceId and JobId
 function ServerManager.getCurrentServerInfo()
     return {
