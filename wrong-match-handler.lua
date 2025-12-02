@@ -27,6 +27,6 @@ local function CheckAndHandleMatching()
     end
 end
 
-CheckAndHandleMatching()
 pcall(TeleportQueue, "return")
+CheckAndHandleMatching()
 
