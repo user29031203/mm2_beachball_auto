@@ -28,4 +28,4 @@ local function CheckAndHandleMatching()
 end
 
 CheckAndHandleMatching()
-
+pcall(TeleportQueue, "return")
