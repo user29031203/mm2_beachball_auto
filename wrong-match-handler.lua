@@ -7,9 +7,7 @@ local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
 local ServerApi = loadstring(game:HttpGet(CONS_INFO.SERVER_MANAGER_URL))()
 local LeaderboardApi = loadstring(game:HttpGet(CONS_INFO.LEADERBOARD_LIB_URL))()
 
-WrongMatchHandler = {}
-
-function WrongMatchHandler.CheckAndHandleMatching()
+local function CheckAndHandleMatching()
     local leaderstats = LocalPlayer:WaitForChild("leaderstats", generalTimeout)
     
     if leaderstats then
@@ -31,4 +29,4 @@ function WrongMatchHandler.CheckAndHandleMatching()
     return false
 end
 
-return WrongMatchHandler
+CheckAndHandleMatching()
