@@ -1,5 +1,6 @@
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
+local MyId = LocalPlayer.UserId
 
 local CONS_INFO_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/constants.lua" 
 local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
@@ -38,5 +39,18 @@ local function CheckAndHandleMatching()
     end
 end
 
+local function shareJobId() 
+    ---
+end
+
 CheckAndHandleMatching()
+
+local status = LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName)
+if not status then
+    if MyId == CONS_INFO.joinerId then
+        -- share jobid via dweetr then join to hoster 
+        print("DEBUGGER A1")
+    end
+end
+
 pcall(TeleportQueue, "return")
