@@ -35,7 +35,7 @@ function Leaderboard.GetSoloRanks(targetUsernames)
 end
 
 
-function Leaderboard.shouldHosterLose(hosterName, joinerName)
+function Leaderboard.ShouldHosterLose(hosterName, joinerName)
     local usersToCheck = { hosterName, joinerName }
     
     -- Get the data struct
@@ -63,7 +63,7 @@ function Leaderboard.shouldHosterLose(hosterName, joinerName)
 end -- <--- This 'end' was missing in your code
 
 
-function Leaderboard.isDuoMatched(hosterName, joinerName)
+function Leaderboard.IsDuoMatched(hosterName, joinerName)
     return if Leaderboard.shouldHosterLose(hosterName, joinerName) == Leaderboard.NotMatched then false else true
 end
     
