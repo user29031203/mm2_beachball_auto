@@ -25,7 +25,7 @@ local MOVEMENT_LIB_URL = "https://raw.githubusercontent.com/user29031203/LegendZ
 local MovementApi = loadstring(game:HttpGet(MOVEMENT_LIB_URL))()
 
 local SERVER_MANAGER_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/server-manager.lua"
-local ServerManager = loadstring(game:HttpGet(SERVER_MANAGER_URL))()
+local ServerApi = loadstring(game:HttpGet(SERVER_MANAGER_URL))()
 
 -- teleportatin support 
 local TeleportQueue = queue_on_teleport 
@@ -91,10 +91,10 @@ local function characterChecker()
             print("RESPAWNED — FULLY LOADED & ALIVE (HP:", hum.Health, ")")
             -- do the method
             task.wait(0.1)
-            ServerManager.JoinRandomServer()
+            ServerApi.JoinRandomServer()
             --Connect:Disconnect()
         else
-            ServerManager.JoinRandomServer()
+            ServerApi.JoinRandomServer()
             warn("Respawn failed or character missing parts")
             --Connect:Disconnect()
         end
@@ -121,12 +121,12 @@ if leaderstats then
         reset()
         characterChecker()
     else 
-        ServerManager.JoinRandomServer()
+        ServerApi.JoinRandomServer()
     end
 else
     warn("leaderstats NEVER loaded → Hopping anyway (safe fallback)")
     task.wait(0.1)
-    ServerManager.JoinRandomServer()
+    ServerApi.JoinRandomServer()
 end
 
 pcall(TeleportQueue, "return")
