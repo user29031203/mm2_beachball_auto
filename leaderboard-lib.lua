@@ -24,7 +24,7 @@ function Leaderboard.GetRanks(targetUsernames)
             if lobbyRankStat then
                 -- Success: Store the value (number or string)
                 results[username] = lobbyRankStat.Value
-            else if duelRankStat then
+            elseif duelRankStat then
                 -- Player exists, but stats haven't loaded or stat name is wrong
                 results[username] = duelRankStat.Value
             else
