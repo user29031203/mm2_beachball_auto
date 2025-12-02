@@ -1,25 +1,25 @@
 local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
 
 local ServerManager = {
     duelsPlaceId = 12360882630
 }
 
 function ServerManager.GetCurrentServerInfo()
-    return {
-        PlaceId = game.PlaceId,
-        JobId = game.JobId
-    }
+    return { PlaceId = game.PlaceId, JobId = game.JobId }
 end
 
-function ServerManager.JoinServerById(number, string)
-    TeleportService:TeleportToPlaceInstance(placeId, jobId, LocalPlayer)
+function ServerManager.JoinServerById(placeId, jobId, player)
+    player = player or Players.LocalPlayer
+    if not player then return end
+    TeleportService:TeleportToPlaceInstance(placeId, jobId, player)
 end
 
-function ServerManager.JoinRandomServer(number)
+function ServerManager.JoinRandomServer(placeId, player)
+    player = player or Players.LocalPlayer
     placeId = placeId or ServerManager.duelsPlaceId
-    TeleportService:Teleport(placeId, LocalPlayer)
+    if not player then return end
+    TeleportService:Teleport(placeId, player)
 end
 
-return ServerManager  -- ← THIS IS CRITICAL
+return ServerManager
