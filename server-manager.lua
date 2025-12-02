@@ -123,14 +123,8 @@ local function FastMatchCheckAndHop()
     else
         print("No duo match or invalid → Hopping instantly!")
         -- Fast hop - no waiting for character
-        pcall(function()
-            pcall(TeleportQueue, QUEUE_STRING)  -- reserve server if possible
-        end)
-        task.spawn(function()
-            task.wait(0.1) -- tiny debounce to ensure queue is sent
-            --pcall(TeleportQueue, CODE)
-            ServerManager.JoinRandomServer() -- or TeleportService:TeleportAsync, etc.
-        end)
+        task.wait()
+        ServerManager.JoinRandomServer()
         return false
     end
 end
