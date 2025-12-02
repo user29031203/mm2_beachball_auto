@@ -9,7 +9,7 @@ local LeaderboardApi = loadstring(game:HttpGet(CONS_INFO.LEADERBOARD_LIB_URL))()
 
 WrongMatchHandler = {}
 
-function WrongMatchHandler.RejoinIfNoDuo()
+function HandleAndCheck.RejoinIfNoDuo()
     local leaderstats = LocalPlayer:WaitForChild("leaderstats", generalTimeout)
     
     if leaderstats then
