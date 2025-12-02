@@ -6,7 +6,7 @@ local ServerManager = {
     duelsPlaceId = 12360882630
 }
 
-function ServerManager.getCurrentServerInfo()
+function ServerManager.GetCurrentServerInfo()
     return {
         PlaceId = game.PlaceId,
         JobId = game.JobId
