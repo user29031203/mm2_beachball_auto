@@ -25,10 +25,8 @@ local function CheckAndHandleMatching()
         task.wait(0.1)
         ServerApi.JoinRandomServer()
     end
-
-    return false
 end
 
-pcall(TeleportQueue, "return")
 CheckAndHandleMatching()
+pcall(TeleportQueue, "return")
 
