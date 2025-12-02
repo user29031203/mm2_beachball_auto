@@ -74,31 +74,10 @@ local CODE = [[
     -- use args[1], args[2], etc.
 ]]
 
+-- character load and wait func
 
--- Leaderboard load and wait
-status = LeaderboardApi.IsDuoMatched(altsInfo.hosterName, altsInfo.joinerName)
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
--- Wait for leaderstats to appear on LocalPlayer (with 10 sec timeout)
-local leaderstats = LocalPlayer:WaitForChild("leaderstats", 10)
-
-if leaderstats then
-    print("leaderstats loaded — checking duo status...")
-    local status = LeaderboardApi.isDuoMatched(altsInfo.hosterName, altsInfo.joinerName)
-    if status then
-        -- LOGIC
-    else 
-        ServerManager.JoinRandomServer()
-    end
-else
-    warn("leaderstats NEVER loaded → Hopping anyway (safe fallback)")
-    task.wait(0.1)
-    ServerManager.JoinRandomServer()
-end
-
--- Character load and wait 
-if status == true then
+local function characterChecker() 
+    -- Character load and wait 
     LocalPlayer.CharacterAdded:Connect(function(char)
         -- We wait for the humanoid to exist
         local hum = char:WaitForChild("Humanoid", 10)
@@ -117,15 +96,32 @@ if status == true then
             Connect:Disconnect()
         else
             warn("Respawn failed or character missing parts")
+            ServerManager.JoinRandomServer()
             Connect:Disconnect()
         end
     end)
     return true
+end 
 
+
+-- Leaderboard load and wait
+status = LeaderboardApi.IsDuoMatched(altsInfo.hosterName, altsInfo.joinerName)
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- Wait for leaderstats to appear on LocalPlayer (with 10 sec timeout)
+local leaderstats = LocalPlayer:WaitForChild("leaderstats", 10)
+
+if leaderstats then
+    print("leaderstats loaded — checking duo status...")
+    local status = LeaderboardApi.isDuoMatched(altsInfo.hosterName, altsInfo.joinerName)
+    if status then
+        characterChecker()
+    else 
+        ServerManager.JoinRandomServer()
+    end
 else
-    print("No duo match or invalid → Hopping instantly!")
-    -- Fast hop - no waiting for character
-    task.wait()
+    warn("leaderstats NEVER loaded → Hopping anyway (safe fallback)")
+    task.wait(0.1)
     ServerManager.JoinRandomServer()
-    return false
 end
