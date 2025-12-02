@@ -12,7 +12,8 @@ local consInfo = {
         TELEPORT_HANDLER_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/teleport-handler.lua",
         LEADERBOARD_LIB_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/leaderboard-lib.lua",
         MOVEMENT_LIB_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/movement-lib.lua",
-        WRONG_MATCH_HANDLER_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/wrong-match-handler.lua"
+        WRONG_MATCH_HANDLER_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/wrong-match-handler.lua",
+        WRONG_MATCH_REJOINER_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/wrong-match-rejoiner.lua"
     }
 }
 
