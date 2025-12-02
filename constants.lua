@@ -15,3 +15,5 @@ local consInfo = {
         WRONG_MATCH_HANDLER_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/wrong-match-handler.lua"
     }
 }
+
+return consInfo
