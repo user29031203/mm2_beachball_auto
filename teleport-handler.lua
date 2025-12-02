@@ -1,10 +1,30 @@
 local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
-local duelsPlaceId = 12360882630
-local SCRIPT_LOADER_URL = "https://raw.githubusercontent.com/user29031203/mm2_beachball_auto/refs/heads/main/run.lua"
-local QUEUE_STRING = "loadstring(game:HttpGet('" .. SCRIPT_LOADER_URL .. "', true))()"
 local MyId = LocalPlayer.UserId
+
+local altsInfo = {
+    hosterName = "306a2e5cd_2",
+    joinerName = "306a2e5cd_1",
+    hosterId = "9359470613", -- A2
+    joinerId = "9359433164" -- CD
+}
+
+local TELEPORT_HANDLER_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/teleport-handler.lua"
+local QUEUE_STRING = "loadstring(game:HttpGet('" .. TELEPORT_HANDLER_URL .. "'))()"
+
+--[[local DWEETR_LIB_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/dweetr-lib.lua" -- Make sure this matches your github link
+local DweetLib = loadstring(game:HttpGet(DWEETR_LIB_URL))()
+local Comm = DweetLib.new(mySecretKey)]]
+
+local LEADERBOARD_LIB_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/leaderboard-lib.lua"
+local LeaderboardApi = loadstring(game:HttpGet(LEADERBOARD_LIB_URL))()
+
+local MOVEMENT_LIB_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/movement-lib.lua"
+local MovementApi = loadstring(game:HttpGet(MOVEMENT_LIB_URL))()
+
+local SERVER_MANAGER_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/server-manager.lua"
+local ServerManager = loadstring(game:HttpGet(SERVER_MANAGER_URL))()
 
 -- teleportatin support 
 local TeleportQueue = queue_on_teleport 
@@ -28,33 +48,6 @@ print("Environment Ready! Running Sequence...")
 -- CLEAR OLD LISTENERS FIRST
 for _, connection in pairs(getconnections(game.Players.LocalPlayer.CharacterAdded)) do
     connection:Disconnect()
-end
-
-local function JoinServerById(player: Player, placeId: number, jobId: string)
-    TeleportService:TeleportToPlaceInstance(placeId, jobId, player)
-end
-
--- Function to get the current server's PlaceId and JobId
-local function getCurrentServerInfo()
-    return {
-        PlaceId = game.PlaceId,  -- The ID of the place (map/environment) currently running<grok-card data-id="399a2f" data-type="citation_card"></grok-card><grok-card data-id="b7bb03" data-type="citation_card"></grok-card>
-        JobId = game.JobId       -- Unique UUID for this specific server instance<grok-card data-id="51a253" data-type="citation_card"></grok-card><grok-card data-id="ffaeb5" data-type="citation_card"></grok-card>
-    }
-end
-
--- Function to join a specific server instance by its unique JobId
-local function JoinServerById(player: Player, placeId: number, jobId: string)
-    TeleportService:TeleportToPlaceInstance(placeId, jobId, player)
-end
-
-local function JoinRandomServer(placeId: number)
-    -- Teleport() will automatically find the best available server 
-    -- (or create a new one) for the given PlaceId.
-    if LocalPlayer then
-        TeleportService:Teleport(placeId, LocalPlayer)
-    else
-        warn("LocalPlayer not available to teleport.")
-    end
 end
 
 local function reset()
@@ -96,16 +89,28 @@ LocalPlayer.CharacterAdded:Connect(function(char)
     end
 end)
 
-print("--- Script Loaded ---")
-print("Queuing script command for the next server...")
 
--- Client Seperation
-if MyId == 9359470613 then        -- ← CHANGE THIS TO ALT1'S USERID
-    print("IM 306A2 -- HOST")
-elseif MyId == 9359433164 then    -- ← CHANGE THIS TO ALT2'S USERID 
-    print("IM 306CD -- JOINER")
-	pcall(TeleportQueue, "return")
-	reset()
+-- Lobby matcher
+local newCodeArgs = {}
+
+local argString = ""
+for i, v in pairs(newCodeArgs) do
+    if type(v) == "string" then v = '"'..v..'"' end
+    argString = argString .. (i>1 and ", " or "") .. tostring(v)
+end
+
+local CODE = [[
+    local args = {]]..argString..[[}
+    print("Teleported with args:", table.unpack(args))
+    -- use args[1], args[2], etc.
+]]
+
+
+-- Check matchmaking
+local status = LeaderboardApi.isDuoMatched(altsInfo.hosterName, altsInfo.joinerName)
+if status then
+    --
 else
-    print("Unknown alt - check UserIds")
+	pcall(TeleportQueue, CODE)
+    ServerManager.JoinRandomServer()
 end
