@@ -46,4 +46,4 @@ else
     pcall(TeleportQueue, "return")
 end
 
-CheckAndHandleMatching()
+return CheckAndHandleMatching()
