@@ -20,8 +20,8 @@ local DWEETR_LIB_URL = "https://raw.githubusercontent.com/user29031203/LegendZer
 local DweetLib = loadstring(game:HttpGet(DWEETR_LIB_URL))()
 local Comm = DweetLib.new(mySecretKey)
 
-local LEADERBOARD_LIB_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/leaderboard-lib.lua"
-local LeaderboardApi = loadstring(game:HttpGet(LEADERBOARD_LIB_URL))()
+-- local LEADERBOARD_LIB_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/leaderboard-lib.lua"
+-- local LeaderboardApi = loadstring(game:HttpGet(LEADERBOARD_LIB_URL))()
 
 local MOVEMENT_LIB_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/movement-lib.lua"
 local MovementApi = loadstring(game:HttpGet(MOVEMENT_LIB_URL))()
