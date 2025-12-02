@@ -1,9 +1,10 @@
 local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
-local duelsPlaceId = 12360882630
 
-ServerManager = {}
+ServerManager = {
+    duelsPlaceId = 12360882630
+}
 
 function ServerManager.JoinServerById(player: Player, placeId: number, jobId: string)
     TeleportService:TeleportToPlaceInstance(placeId, jobId, player)
@@ -23,6 +24,7 @@ function ServerManager.JoinServerById(player: Player, placeId: number, jobId: st
 end
 
 function ServerManager.JoinRandomServer(placeId: number)
+    placeId = placeId or ServerManager.duelsPlaceId
     -- Teleport() will automatically find the best available server 
     -- (or create a new one) for the given PlaceId.
     if not placeId then
