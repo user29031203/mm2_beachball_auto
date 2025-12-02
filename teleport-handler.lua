@@ -13,7 +13,7 @@ local altsInfo = {
 local TELEPORT_HANDLER_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/teleport-handler.lua"
 local QUEUE_STRING = "loadstring(game:HttpGet('" .. TELEPORT_HANDLER_URL .. "'))()"
 
---[[local DWEETR_LIB_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/dweetr-lib.lua" -- Make sure this matches your github link
+local DWEETR_LIB_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/dweetr-lib.lua" -- Make sure this matches your github link
 local DweetLib = loadstring(game:HttpGet(DWEETR_LIB_URL))()
 local Comm = DweetLib.new(mySecretKey)]]
 
@@ -34,12 +34,6 @@ end
 if not TeleportQueue then
     warn("Executor TeleportQueue function not found. Cannot queue command for next server.")
     return
-end
-
-
--- Wait for the character (crucial for your reset function
-if not LocalPlayer.Character then
-    LocalPlayer.CharacterAdded:Wait()
 end
 
 print("Environment Ready! Running Sequence...")
@@ -67,29 +61,6 @@ local function reset()
     end)
 end
 
-LocalPlayer.CharacterAdded:Connect(function(char)
-    -- We wait for the humanoid to exist
-    local hum = char:WaitForChild("Humanoid", 10)
-    local root = char:WaitForChild("HumanoidRootPart", 10)
-
-    -- CHECK: If the character is already dead, it's the old one. Ignore it.
-    if hum and hum.Health <= 0 then
-        return 
-    end
-
-    if root and hum then
-        print("RESPAWNED — FULLY LOADED & ALIVE (HP:", hum.Health, ")")
-        -- do the method
-        task.wait(0.1)
-        JoinRandomServer(duelsPlaceId)
-		Connect:Disconnect()
-    else
-        warn("Respawn failed or character missing parts")
-		Connect:Disconnect()
-    end
-end)
-
-
 -- Lobby matcher
 local newCodeArgs = {}
 
@@ -105,12 +76,54 @@ local CODE = [[
     -- use args[1], args[2], etc.
 ]]
 
-
 -- Check matchmaking
-local status = LeaderboardApi.isDuoMatched(altsInfo.hosterName, altsInfo.joinerName)
-if status then
-    --
-else
-	pcall(TeleportQueue, CODE)
-    ServerManager.JoinRandomServer()
+local function FastMatchCheckAndHop()
+    print("Waiting for leaderboard data to load...")
+
+    -- This is the KEY: wait until the leaderboard actually returns a real value (not nil)
+    local status
+    repeat
+        status = LeaderboardApi.isDuoMatched(altsInfo.hosterName, altsInfo.joinerName)
+        if status ~= nil then break end
+        task.wait(0.5)  -- small delay, adjust if needed (0.3–0.7 is fine)
+    until status ~= nil
+
+    -- Now we have real data (true or false)
+    if status == true then
+        LocalPlayer.CharacterAdded:Connect(function(char)
+            -- We wait for the humanoid to exist
+            local hum = char:WaitForChild("Humanoid", 10)
+            local root = char:WaitForChild("HumanoidRootPart", 10)
+
+            -- CHECK: If the character is already dead, it's the old one. Ignore it.
+            if hum and hum.Health <= 0 then
+                return 
+            end
+
+            if root and hum then
+                print("RESPAWNED — FULLY LOADED & ALIVE (HP:", hum.Health, ")")
+                -- do the method
+                task.wait(0.1)
+                ServerManager.JoinRandomServer()
+                Connect:Disconnect()
+            else
+                warn("Respawn failed or character missing parts")
+                Connect:Disconnect()
+            end
+        end)
+        return true
+
+    else
+        print("No duo match or invalid → Hopping instantly!")
+        -- Fast hop - no waiting for character
+        task.wait()
+        ServerManager.JoinRandomServer()
+        return false
+    end
 end
+
+local function whattodoaftercharacterspawn()
+    print("IDK")
+end
+
+FastMatchCheckAndHop()
