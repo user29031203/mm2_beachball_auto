@@ -52,11 +52,11 @@ local function reset()
     LocalPlayer.Character = nil
     LocalPlayer.Character = char -- This line triggers the first (dead) CharacterAdded event
 
-    task.spawn(function()
+    --[[task.spawn(function()
         LocalPlayer.CharacterAdded:Wait()
         task.wait(0.1)
         workspace.CurrentCamera.CFrame = camCF
-    end)
+    end)]]
 end
 
 -- Lobby matcher
