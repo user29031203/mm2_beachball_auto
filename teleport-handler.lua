@@ -68,8 +68,8 @@ local function characterChecker()
     end)
 end 
 
-local WrongMatchHandler = loadstring(game:HttpGet(CONS_INFO.URLS.WRONG_MATCH_HANDLER_URL))
-if WrongMatchHandler then
+local WrongMatchHandler = loadstring(game:HttpGet(CONS_INFO.URLS.WRONG_MATCH_HANDLER_URL))()
+if WrongMatchHandler == true then
     reset()
     characterChecker()
 end
