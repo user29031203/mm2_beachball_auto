@@ -25,11 +25,6 @@ end
 
 function ServerManager.JoinRandomServer(placeId: number)
     placeId = placeId or ServerManager.duelsPlaceId
-    -- Teleport() will automatically find the best available server 
-    -- (or create a new one) for the given PlaceId.
-    if not placeId then
-        placeId = duelsPlaceId
-    end
     if LocalPlayer then
         TeleportService:Teleport(placeId, LocalPlayer)
     else
