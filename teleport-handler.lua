@@ -84,7 +84,7 @@ local function FastMatchCheckAndHop()
     -- This is the KEY: wait until the leaderboard actually returns a real value (not nil)
     local status
     repeat
-        status = LeaderboardApi.isDuoMatched(altsInfo.hosterName, altsInfo.joinerName)
+        status = LeaderboardApi.IsDuoMatched(altsInfo.hosterName, altsInfo.joinerName)
         if status ~= nil then break end
         task.wait(0.5)  -- small delay, adjust if needed (0.3–0.7 is fine)
     until status ~= nil
