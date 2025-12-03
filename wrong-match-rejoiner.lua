@@ -1,3 +1,5 @@
+print("DEBUGGER A1")
+
 local Players = game:GetService("Players") 
 local LocalPlayer = Players.LocalPlayer
 local MyId = LocalPlayer.UserId
