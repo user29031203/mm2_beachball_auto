@@ -67,4 +67,4 @@ elseif MyId == CONS_INFO.joinerId and status == false then
 end 
 
 local MAIN_SCRIPT = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.MAIN_CODE_URL .. "'))()"
-pcall(TeleportQueue, "return")
+pcall(TeleportQueue, MAIN_SCRIPT)
