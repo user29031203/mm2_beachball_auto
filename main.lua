@@ -45,32 +45,35 @@ end
 local hosterShouldLose = LeaderboardApi.ShouldHosterLose(CONS_INFO.hosterName, CONS_INFO.joinerName)
 print(hosterShouldJoin)
 
--- move alts to queue area
-MovementApi.SmartWalkTo(MovementApi.HosterPos)
-
 -- match checking and teleportation trigger
 
-hosterShouldLose = true
+hosterShouldLose = ""
 if type(hosterShouldLose) == "string" then
+	print("CODE BLOCK 1")
 	warn("NO DUO FOUND RUNNING REJOIN HANDLER/LOBBY REFRESHER")
     task.wait(3)
     local WRONG_WATCH_REJOINER_SCRIPT = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL .. "'))()"  
-    pcall(TeleportQueue, WRONG_WATCH_REJOINER_SCRIPT)
-	--return
+    loadstring(game:HttpGet(CONS_INFO.URLS.WRONG_MATCH_HANDLER_URL))()
 elseif MyId == CONS_INFO.hosterId and hosterShouldLose == true then        -- ← CHANGE THIS TO ALT1'S USERID
-    print("IM A2 -- HOST")
+    print("CODE BLOCK 2")
+	print("IM A2 -- HOST")
     pcall(TeleportQueue, TELEPORT_HANDLER_SCRIPT) 
 elseif MyId == CONS_INFO.joinerId and hosterShouldLose == false then    -- ← CHANGE THIS TO ALT2'S USERID 
-    print("IM CD -- JOINER")
+    print("CODE BLOCK 3")
+	print("IM CD -- JOINER")
     pcall(TeleportQueue, TELEPORT_HANDLER_SCRIPT) 
 else
     print("Unknown alt - check UserIds")
 end 
 
 if MyId == CONS_INFO.joinerId and hosterShouldLose == true then
-    pcall(TeleportQueue, MATCH_HANDLER_SCRIPT)
+	pcall(TeleportQueue, MATCH_HANDLER_SCRIPT)
 	print("JOINER MATCHHANDLING ACTIVATED!")
 elseif MyId == CONS_INFO.hosterId and hosterShouldLose == false then
     pcall(TeleportQueue, MATCH_HANDLER_SCRIPT)
 	print("HOSTER MATCHHANDLING ACTIVATED!")
+end
+
+if type(hosterShouldLose) ~= "string" then
+	MovementApi.SmartWalkTo(MovementApi.HosterPos)
 end
