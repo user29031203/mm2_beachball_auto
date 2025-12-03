@@ -1,8 +1,9 @@
-local CONS_INFO_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/constants.lua" 
-local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
 local Players = game:GetService("Players") 
 local LocalPlayer = Players.LocalPlayer
 local MyId = LocalPlayer.UserId
+
+local CONS_INFO_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/constants.lua" 
+local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
 
 -- external libs
 local LeaderboardApi = loadstring(game:HttpGet(CONS_INFO.URLS.LEADERBOARD_LIB_URL))()
