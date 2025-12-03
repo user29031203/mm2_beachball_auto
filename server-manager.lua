@@ -25,7 +25,6 @@ local Players = game:GetService("Players")
 
 -- debug purposes only
 local HttpService = game:GetService("HttpService")
-local TeleportService = game:GetService("TeleportService")
 
 local function getServers(placeId)
     local cursor = ""
