@@ -72,7 +72,8 @@ function DweetLib:GetLatest()
     
     local success, result = pcall(function()
         -- Add _nocache to force fresh data
-        return game:HttpGet(url .. "?_nocache=" .. os.time(), true)
+        --game:HttpGet(url .. "?_nocache=" .. os.time(), true) 
+        return game:HttpGet(url, true) 
     end)
 
     if not success then return nil, "Connection Error" end
