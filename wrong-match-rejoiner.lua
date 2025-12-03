@@ -69,7 +69,7 @@ elseif MyId == CONS_INFO.joinerId and status == false then
 	end
 elseif status == true then 
 	if MyId == CONS_INFO.hosterId then
-		task.wait(4)
+		--task.wait(4)
 		loadstring(game:HttpGet(CONS_INFO.URLS.MAIN_CODE_URL))()
 	else
 		loadstring(game:HttpGet(CONS_INFO.URLS.MAIN_CODE_URL))()
