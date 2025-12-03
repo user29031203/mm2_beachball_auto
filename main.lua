@@ -43,7 +43,7 @@ end
 
 -- get points of both client
 local hosterShouldLose = LeaderboardApi.ShouldHosterLose(CONS_INFO.hosterName, CONS_INFO.joinerName)
-print(hosterShouldJoin)
+print(hosterShouldLose)
 
 -- match checking and teleportation trigger
 if type(hosterShouldLose) == "string" then
