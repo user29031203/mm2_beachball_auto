@@ -52,12 +52,12 @@ if MyId == CONS_INFO.hosterId and status == false then       -- ← CHANGE THIS 
     print("IM HOST!")
     local success, msg = SendJobId()
 	print("Send Result:", msg) 
-	task.wait(5.5)
+	task.wait(2.5)
 	loadstring(game:HttpGet(CONS_INFO.URLS.MAIN_CODE_URL))()
 elseif MyId == CONS_INFO.joinerId and status == false then
     -- receive jobid through dweetr 
     print("IM JOINER!")
-    task.wait(5)
+    task.wait(2)
 	local MAIN_SCRIPT = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.MAIN_CODE_URL .. "'))()"
 	pcall(TeleportQueue, MAIN_SCRIPT)
     local ReadedData, msg = ReadJobId() 
