@@ -2,6 +2,8 @@ local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
+local ServerManager = {}
+
 function ServerManager.GetCurrentServerInfo()
     return { PlaceId = game.PlaceId, JobId = game.JobId }
 end
