@@ -23,50 +23,73 @@ end
 -- DEBUG ONLY
 -- This is the key: run the HTTP request from PlayerGui, not CoreGui
 local HttpService = game:GetService("HttpService")
-
--- Ultra-safe HTTP that never fails on any executor
 function ServerManager.safeHttpGet(url)
-    -- Try normal first
-    local success, result = pcall(HttpService.GetAsync, HttpService, url, false)
-    if success and result then return result end
+    print("[ServerManager] Trying HTTP request:", url)
 
-    -- If blocked → run in PlayerGui (bypasses CoreGui)
-    local pg = LocalPlayer:FindFirstChild("PlayerGui") or LocalPlayer:WaitForChild("PlayerGui", 10)
-    if not pg then return nil end
-
-    local gui   = Instance.new("ScreenGui", pg)
-    local scr   = Instance.new("LocalScript", gui)
-    local done  = false
-    local data  = nil
-
-    scr.AncestryChanged:Connect(function()
-        if scr.Parent == pg then
-            task.wait(0.1) -- tiny delay = clean response
-            local ok, res = pcall(HttpService.GetAsync, HttpService, url, false)
-            if ok and res then data = res end
-            done = true
-            gui:Destroy()
-        end
+    local success, result = pcall(function()
+        return HttpService:GetAsync(url, false)
     end)
 
-    local timeout = 0
-    while not done and timeout < 4 do
-        task.wait(0.1)
-        timeout += 0.1
+    if success and result then
+        print("[ServerManager] HTTP success! Got response.")
+        return result
+    else
+        print("[ServerManager] Normal HTTP failed →", result or "unknown error")
+        print("[ServerManager] Falling back to PlayerGui bypass...")
     end
-    return data
+
+    -- PlayerGui bypass with FULL error visibility
+    local pg = LocalPlayer:FindFirstChild("PlayerGui") or LocalPlayer:WaitForChild("PlayerGui", 10)
+    if not pg then
+        print("[ServerManager] ERROR: PlayerGui not found!")
+        return nil
+    end
+
+    local resultData = nil
+    local finished = false
+
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "HttpBypass"
+    gui.Parent = pg
+
+    local scr = Instance.new("LocalScript", gui)
+    scr.Source = [[
+        task.wait(0.2)
+        local HttpService = game:GetService("HttpService")
+        local url = "]] .. url .. [["
+        local ok, res = pcall(HttpService.GetAsync, HttpService, url, false)
+        if ok then
+            getfenv(0).RESULT = res
+            print("[ServerManager] PlayerGui HTTP SUCCESS!")
+        else
+            print("[ServerManager] PlayerGui HTTP FAILED:", res)
+        end
+    ]]
+
+    -- Wait for result
+    repeat
+        task.wait(0.1)
+        if scr:FindFirstChild("RESULT") then
+            resultData = scr.RESULT.Value
+            finished = true
+        end
+    until finished or not gui.Parent
+
+    task.wait(0.1)
+    gui:Destroy()
+
+    if resultData then
+        print("[ServerManager] PlayerGui bypass worked!")
+        return resultData
+    else
+        print("[ServerManager] Both HTTP methods failed.")
+        return nil
+    end
 end
 
--- Safe JSON decode (never errors)
-function ServerManager.safeJsonDecode(str)
-    if not str or str == "" then return nil end
-    local success, decoded = pcall(HttpService.JSONDecode, HttpService, str)
-    if success then return decoded end
-    return nil
-end
-
--- Get smallest server (not current, not full)
+-- Get and PRINT all valid servers
 function ServerManager.getSmallestServer(placeId)
+    print("[ServerManager] Fetching servers for PlaceId:", placeId)
     local servers = {}
     local cursor = ""
 
@@ -75,38 +98,54 @@ function ServerManager.getSmallestServer(placeId)
         if cursor ~= "" then url = url .. "&cursor=" .. cursor end
 
         local raw = ServerManager.safeHttpGet(url)
-        if not raw then break end
+        if not raw then
+            print("[ServerManager] Failed to get server list. Stopping.")
+            break
+        end
 
-        local json = ServerManager.safeJsonDecode(raw)
-        if not json or not json.data then break end
+        local success, data = pcall(HttpService.JSONDecode, HttpService, raw)
+        if not success or not data.data then
+            print("[ServerManager] JSON decode failed or no data!")
+            break
+        end
 
-        for _, sv in ipairs(json.data) do
-            if sv.playing < sv.maxPlayers and sv.id ~= game.JobId then
+        print(string.format("[ServerManager] Found %d servers on this page", #data.data))
+
+        for i, sv in ipairs(data.data) do
+            if sv.id ~= game.JobId and sv.playing < sv.maxPlayers then
                 table.insert(servers, sv)
+                print(string.format("   [%d] %d/%d players | JobId: %s", #servers, sv.playing, sv.maxPlayers, sv.id:sub(1,12).."..."))
             end
         end
 
-        cursor = json.nextPageCursor or ""
-        task.wait(0.35) -- respect rate-limit
+        cursor = data.nextPageCursor or ""
+        task.wait(0.4)
     until not cursor
 
-    if #servers == 0 then return nil end
+    if #servers == 0 then
+        print("[ServerManager] No valid servers found (all full or current server)")
+        return nil
+    end
 
-    table.sort(servers, function(a, b) return (a.playing or 0) < (b.playing or 0) end)
-    return servers[1] or servers[2] or servers[3]
+    table.sort(servers, function(a,b) return a.playing < b.playing end)
+    print("[ServerManager] Smallest server has " .. servers[1].playing .. " players")
+    return servers[1]
 end
 
--- FINAL FUNCTION — ONLY THIS ONE YOU CALL
-function ServerManager.ChangeServer(placeId)
+-- MAIN FUNCTION
+function ServerManager.JoinRandomServer(placeId)
     placeId = placeId or CONS_INFO.duelsPlaceId
+    print("[ServerManager] Starting server hop to PlaceId:", placeId)
 
     local target = ServerManager.getSmallestServer(placeId)
 
     if target then
-        print("ServerManager → Hopping to server with " .. target.playing .. " players")
+        print("[ServerManager] Teleporting in 2 seconds to server with " .. target.playing .. " players...")
+        task.wait(2)  -- You can read console
         TeleportService:TeleportToPlaceInstance(placeId, target.id, LocalPlayer)
     else
-        print("ServerManager → No other servers found, doing normal teleport")
+        print("[ServerManager] No alternative server found. Doing normal teleport in 2 seconds...")
+        task.wait(2)
         TeleportService:Teleport(placeId, LocalPlayer)
     end
 end
