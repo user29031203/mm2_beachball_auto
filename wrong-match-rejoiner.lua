@@ -59,12 +59,13 @@ elseif MyId == CONS_INFO.joinerId and status == false then
     -- receive jobid through dweetr 
     print("IM JOINER!")
     task.wait(3)
+	pcall(TeleportQueue, MAIN_SCRIPT)
     local ReadedData = ReadJobId() 
 	if ReadedData then 
     	local MAIN_SCRIPT = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.MAIN_CODE_URL .. "'))()"
-		pcall(TeleportQueue, MAIN_SCRIPT)
 		ServerApi.JoinServerById(CONS_INFO.duelsPlaceId, ReadedData.JobId)
 	else
+		ServerManager.JoinRandomServer()
 		-- add error handling, join randomserver if cant read data then pcall main script
 	end
 elseif status == true then 
