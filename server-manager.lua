@@ -56,7 +56,7 @@ local function getServers(placeId)
     return servers
 end
 
-function ServerManager.JoinRandomServer(placeId)  -- Now JoinSmallestServer really
+function ServerManager.ChangeServer(placeId)  -- Now JoinSmallestServer really
     placeId = placeId or CONS_INFO.duelsPlaceId
     local player = Players.LocalPlayer
     
