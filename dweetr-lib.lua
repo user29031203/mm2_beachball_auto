@@ -68,6 +68,7 @@ end
 
 -- 4. READ: Get Latest Data
 function DweetLib:GetLatest()
+    print("DEBUGGER B1")
     local url = self.BaseUrl .. "/get/latest/dweet/for/" .. self.ThingName
     
     local success, result = pcall(function()
@@ -76,11 +77,14 @@ function DweetLib:GetLatest()
         return game:HttpGet(url, true) 
     end)
 
+    print("DEBUGGER B2")
+
     if not success then return nil, "Connection Error" end
-
+    
     local decoded = HttpService:JSONDecode(result)
-
+    
     print(type(decoded))
+    print("DEBUGGER B3")
     
     -- dweetr.io follows the same JSON structure: { "with": [ { "content": { ... } } ] }
     if decoded and decoded.with and decoded.with[1] then
