@@ -60,7 +60,7 @@ elseif MyId == CONS_INFO.joinerId and status == false then
     print("IM JOINER!")
     task.wait(3)
 	pcall(TeleportQueue, MAIN_SCRIPT)
-    local ReadedData = ReadJobId() 
+    local ReadedData, msg = ReadJobId() 
 	if ReadedData then 
     	local MAIN_SCRIPT = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.MAIN_CODE_URL .. "'))()"
 		ServerApi.JoinServerById(CONS_INFO.duelsPlaceId, ReadedData.JobId)
