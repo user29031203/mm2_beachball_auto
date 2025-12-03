@@ -27,7 +27,8 @@ local consInfo = {
         MOVEMENT_LIB_URL         = "movement-lib.lua",
         WRONG_MATCH_HANDLER_URL  = "wrong-match-handler.lua",
         WRONG_MATCH_REJOINER_URL = "wrong-match-rejoiner.lua",
-        LOBBY_REFRESHER_URL      = "lobby-refresher.lua"
+        LOBBY_REFRESHER_URL      = "lobby-refresher.lua",
+        MAIN_CODE_URL            = "main.lua"
     }
 } 
 
