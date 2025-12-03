@@ -79,8 +79,11 @@ function DweetLib:GetLatest()
 
     print("DEBUGGER B2")
 
-    if not success then return nil, "Connection Error" end
-    
+    if not success or type(result) == "table" then 
+        print("its not table!")
+        return nil, "Connection Error" 
+    end
+
     local decoded = HttpService:JSONDecode(result)
     
     print(type(decoded))
