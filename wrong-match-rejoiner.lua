@@ -34,7 +34,7 @@ if MyId == CONS_INFO.hosterId and status == false then        -- ← CHANGE THIS
 elseif MyId == CONS_INFO.joinerId and status == false then
     -- receive jobid through dweetr 
     print("IM JOINER!")
-    
+    ServerApi.JoinServerById(CONS_INFO.duelsPlaceId, hosterJobId)
 end 
 
 pcall(TeleportQueue, "return")
