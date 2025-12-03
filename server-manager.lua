@@ -72,3 +72,5 @@ function ServerManager.ChangeServer(placeId)
     end
 end
 -- DEBUG ONLY
+
+return ServerManager
