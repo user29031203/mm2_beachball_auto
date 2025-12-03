@@ -1,3 +1,5 @@
+print("ERROR DEBUGGER A")
+
 local Players = game:GetService("Players") 
 local LocalPlayer = Players.LocalPlayer
 local MyId = LocalPlayer.UserId
