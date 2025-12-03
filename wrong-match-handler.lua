@@ -28,7 +28,7 @@ local function CheckAndHandleMatching()
         -- true was status, it changed to true for testing purposes only
         if true then
             local hosterShouldLose = LeaderboardApi.ShouldHosterLose(CONS_INFO.hosterName, CONS_INFO.joinerName)
-            
+            hosterShouldLose = false -- debugging/testing purposes
             return true, hosterShouldLose 
         else 
             print("Matched with a random!")
