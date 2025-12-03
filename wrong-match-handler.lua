@@ -26,9 +26,9 @@ local function CheckAndHandleMatching()
         print("leaderstats loaded — checking duo status...")
         local status = LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName)
         -- true was status, it changed to true for testing purposes only
-        if true then
+        if status then
             local hosterShouldLose = LeaderboardApi.ShouldHosterLose(CONS_INFO.hosterName, CONS_INFO.joinerName)
-            hosterShouldLose = false -- debugging/testing purposes
+            -- debugging/testing purposes if its false/true
             return true, hosterShouldLose 
         else 
             print("Matched with a random!")
