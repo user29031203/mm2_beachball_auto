@@ -3,7 +3,10 @@ local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
 local LocalPlayer = Players.LocalPlayer
 local MyId = LocalPlayer.UserId
 
+-- external libs
 local LeaderboardApi = loadstring(game:HttpGet(CONS_INFO.URLS.LEADERBOARD_LIB_URL))()
+local DweetLib = loadstring(game:HttpGet(CONS_INFO.URLS.DWEETR_LIB_URL))()
+local Comm = DweetLib.new(mySecretKey)
 
 -- teleportatin support 
 local TeleportQueue = queue_on_teleport 
@@ -15,16 +18,13 @@ if not TeleportQueue then
     return
 end
 
-local function shareJobId() 
-    ---
-end
-
 local status = LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName)
 
 if MyId == CONS_INFO.hosterId and status == false then        -- ← CHANGE THIS TO ALT1'S USERID
-    --
+    -- send jobid through dweetr
+    
 elseif MyId == CONS_INFO.joinerId and status == false then
-    --
+    -- receive jobid through dweetr 
 end 
 
 pcall(TeleportQueue, "return")
