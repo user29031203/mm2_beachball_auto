@@ -133,7 +133,7 @@ function ServerManager.getSmallestServer(placeId)
 end
 
 -- MAIN FUNCTION
-function ServerManager.JoinRandomServer(placeId)
+function ServerManager.ChangeServer(placeId)
     placeId = placeId or CONS_INFO.duelsPlaceId
     print("[ServerManager] Starting server hop to PlaceId:", placeId)
 
