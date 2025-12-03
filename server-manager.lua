@@ -36,39 +36,44 @@ local function getServers(placeId)
         if success then
             local data = HttpService:JSONDecode(result)
             for _, server in ipairs(data.data) do
-                -- Filter: not full, not current server
+                -- Exclude full servers and current server (safe for cross-place)
                 if server.playing < server.maxPlayers and server.id ~= game.JobId then
                     table.insert(servers, server)
                 end
             end
             cursor = data.nextPageCursor or ""
         else
+            warn("Failed to fetch servers:", result)
             break
         end
     until cursor == ""
     
+    -- Explicitly sort by ascending player count (API already does, but safe)
+    table.sort(servers, function(a, b)
+        return a.playing < b.playing
+    end)
+    
     return servers
 end
 
-function ServerManager.ChangeServer(placeId)
+function ServerManager.JoinRandomServer(placeId)  -- Now JoinSmallestServer really
     placeId = placeId or CONS_INFO.duelsPlaceId
     local player = Players.LocalPlayer
     
-    -- Special case: If same place, quick hop (no HTTP needed)
-    if placeId == game.PlaceId then
-        TeleportService:Teleport(game.PlaceId, player)
-        return
-    end
-    
     local servers = getServers(placeId)
     if #servers > 0 then
-        -- Pick random (or change to servers[1] for lowest pop)
-        local randomServer = servers[math.random(1, #servers)]
-        TeleportService:TeleportToPlaceInstance(placeId, randomServer.id, player)
+        -- Pick SMALLEST available server (servers[1] after sort)
+        local smallestServer = servers[1]
+        -- Double-check not current (paranoia)
+        if smallestServer.id == game.JobId then
+            smallestServer = servers[2] or servers[1]
+        end
+        TeleportService:TeleportToPlaceInstance(placeId, smallestServer.id, player)
+        print("Hopping to smallest server:", smallestServer.playing .. "/" .. smallestServer.maxPlayers, "ID:", smallestServer.id)
     else
-        -- Fallback: Normal teleport (might go to popular)
-        warn("No low-pop servers found, falling back to default")
-        --JoinRandomServer()
+        -- Fallback: Roblox picks a viable server (usually different for same-place)
+        warn("No low-pop servers available, using default teleport")
+        --TeleportService:Teleport(placeId, player)
     end
 end
 -- DEBUG ONLY
