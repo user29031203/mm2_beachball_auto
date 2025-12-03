@@ -1,5 +1,7 @@
 local CONS_INFO_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/constants.lua" 
 local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
+local LocalPlayer = Players.LocalPlayer
+local MyId = LocalPlayer.UserId
 
 local LeaderboardApi = loadstring(game:HttpGet(CONS_INFO.URLS.LEADERBOARD_LIB_URL))()
 
@@ -19,8 +21,10 @@ end
 
 local status = LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName)
 
-if not status then
-    print("DEBUGGER A1")
-end
+if MyId == CONS_INFO.hosterId and status == false then        -- ← CHANGE THIS TO ALT1'S USERID
+    --
+elseif MyId == CONS_INFO.joinerId and status == false then
+    --
+end 
 
 pcall(TeleportQueue, "return")
