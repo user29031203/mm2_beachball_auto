@@ -20,45 +20,55 @@ function ServerManager.JoinRandomServer(placeId)
     TeleportService:Teleport(placeId, LocalPlayer)
 end
 
-local TeleportService = game:GetService("TeleportService")
-local Players = game:GetService("Players")
-
--- debug purposes only
+-- DEBUG ONLY
 local HttpService = game:GetService("HttpService")
 
 local function getServers(placeId)
-    local cursor = ""
     local servers = {}
+    local cursor = ""
     repeat
         local url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Asc&limit=100", placeId)
-        if cursor ~= "" then url = url .. "&cursor=" .. cursor end
+        if cursor ~= "" then
+            url = url .. "&cursor=" .. HttpService:UrlEncode(cursor)
+        end
         
-        local success, result = pcall(function()
-            return HttpService:GetAsync(url)
-        end)
-        
+        local success, result = pcall(HttpService.GetAsync, HttpService, url)
         if success then
             local data = HttpService:JSONDecode(result)
-            for _, server in pairs(data.data) do
+            for _, server in ipairs(data.data) do
+                -- Filter: not full, not current server
                 if server.playing < server.maxPlayers and server.id ~= game.JobId then
                     table.insert(servers, server)
                 end
             end
-            cursor = data.nextPageCursor
+            cursor = data.nextPageCursor or ""
+        else
+            break
         end
-    until not cursor
+    until cursor == ""
     
     return servers
 end
 
--- debug only
 function ServerManager.ChangeServer(placeId)
     placeId = placeId or CONS_INFO.duelsPlaceId
+    local player = Players.LocalPlayer
+    
+    -- Special case: If same place, quick hop (no HTTP needed)
+    if placeId == game.PlaceId then
+        TeleportService:Teleport(game.PlaceId, player)
+        return
+    end
+    
     local servers = getServers(placeId)
     if #servers > 0 then
+        -- Pick random (or change to servers[1] for lowest pop)
         local randomServer = servers[math.random(1, #servers)]
-        TeleportService:TeleportToPlaceInstance(placeId, randomServer.id, Players.LocalPlayer)
+        TeleportService:TeleportToPlaceInstance(placeId, randomServer.id, player)
     else
-        warn("No available servers found")
+        -- Fallback: Normal teleport (might go to popular)
+        warn("No low-pop servers found, falling back to default")
+        JoinRandomServer()
     end
 end
+-- DEBUG ONLY
