@@ -78,6 +78,8 @@ function DweetLib:GetLatest()
     end)
 
     print("DEBUGGER B2")
+    print("Successs", success)
+    print("Result", result)
 
     if not success or type(result) == "table" then 
         print("its not table!")
