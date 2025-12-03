@@ -22,9 +22,10 @@ local status = LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joine
 
 if MyId == CONS_INFO.hosterId and status == false then        -- ← CHANGE THIS TO ALT1'S USERID
     -- send jobid through dweetr
-    
+    print("IM HOST!")
 elseif MyId == CONS_INFO.joinerId and status == false then
     -- receive jobid through dweetr 
+    print("IM JOINER!")
 end 
 
 pcall(TeleportQueue, "return")
