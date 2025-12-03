@@ -9,8 +9,8 @@ local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
 
 -- external libs
 local LeaderboardApi = loadstring(game:HttpGet(CONS_INFO.URLS.LEADERBOARD_LIB_URL))()
-local DweetLib = loadstring(game:HttpGet(CONS_INFO.URLS.DWEETR_LIB_URL))()
-local Comm = DweetLib.new(mySecretKey)
+--[[local DweetLib = loadstring(game:HttpGet(CONS_INFO.URLS.DWEETR_LIB_URL))()
+local Comm = DweetLib.new(CONS_INFO.mySecretKey)]]
 
 -- teleportatin support 
 local TeleportQueue = queue_on_teleport 
