@@ -24,37 +24,48 @@ end
 -- This is the key: run the HTTP request from PlayerGui, not CoreGui
 local HttpService = game:GetService("HttpService")
 
--- Safe HTTP that bypasses CoreGui block
+-- Ultra-safe HTTP that never fails on any executor
 function ServerManager.safeHttpGet(url)
+    -- Try normal first
     local success, result = pcall(HttpService.GetAsync, HttpService, url, false)
-    if success then return result end
+    if success and result then return result end
 
-    -- Blocked? Run in PlayerGui
-    local pg = LocalPlayer:WaitForChild("PlayerGui", 5)
+    -- If blocked → run in PlayerGui (bypasses CoreGui)
+    local pg = LocalPlayer:FindFirstChild("PlayerGui") or LocalPlayer:WaitForChild("PlayerGui", 10)
     if not pg then return nil end
 
-    local gui = Instance.new("ScreenGui", pg)
-    local scr = Instance.new("LocalScript", gui)
-    local finished = false
+    local gui   = Instance.new("ScreenGui", pg)
+    local scr   = Instance.new("LocalScript", gui)
+    local done  = false
+    local data  = nil
 
     scr.AncestryChanged:Connect(function()
         if scr.Parent == pg then
+            task.wait(0.1) -- tiny delay = clean response
             local ok, res = pcall(HttpService.GetAsync, HttpService, url, false)
-            if ok then result = res end
-            finished = true
+            if ok and res then data = res end
+            done = true
             gui:Destroy()
         end
     end)
 
-    local waited = 0
-    while not finished and waited < 3 do
+    local timeout = 0
+    while not done and timeout < 4 do
         task.wait(0.1)
-        waited += 0.1
+        timeout += 0.1
     end
-    return result
+    return data
 end
 
--- Get smallest available server (not current, not full)
+-- Safe JSON decode (never errors)
+function ServerManager.safeJsonDecode(str)
+    if not str or str == "" then return nil end
+    local success, decoded = pcall(HttpService.JSONDecode, HttpService, str)
+    if success then return decoded end
+    return nil
+end
+
+-- Get smallest server (not current, not full)
 function ServerManager.getSmallestServer(placeId)
     local servers = {}
     local cursor = ""
@@ -63,34 +74,39 @@ function ServerManager.getSmallestServer(placeId)
         local url = "https://games.roblox.com/v1/games/" .. placeId .. "/servers/Public?sortOrder=Asc&limit=100"
         if cursor ~= "" then url = url .. "&cursor=" .. cursor end
 
-        local response = ServerManager.safeHttpGet(url)
-        if not response then break end
+        local raw = ServerManager.safeHttpGet(url)
+        if not raw then break end
 
-        local data = HttpService:JSONDecode(response)
-        for _, server in ipairs(data.data or {}) do
-            if server.playing < server.maxPlayers and server.id ~= game.JobId then
-                table.insert(servers, server)
+        local json = ServerManager.safeJsonDecode(raw)
+        if not json or not json.data then break end
+
+        for _, sv in ipairs(json.data) do
+            if sv.playing < sv.maxPlayers and sv.id ~= game.JobId then
+                table.insert(servers, sv)
             end
         end
-        cursor = data.nextPageCursor or ""
-        task.wait(0.3)
+
+        cursor = json.nextPageCursor or ""
+        task.wait(0.35) -- respect rate-limit
     until not cursor
 
-    table.sort(servers, function(a, b) return a.playing < b.playing end)
+    if #servers == 0 then return nil end
+
+    table.sort(servers, function(a, b) return (a.playing or 0) < (b.playing or 0) end)
     return servers[1] or servers[2] or servers[3]
 end
 
--- MAIN FUNCTION - CALL THIS
+-- FINAL FUNCTION — ONLY THIS ONE YOU CALL
 function ServerManager.ChangeServer(placeId)
     placeId = placeId or CONS_INFO.duelsPlaceId
 
     local target = ServerManager.getSmallestServer(placeId)
 
     if target then
-        print("Hopping to server with " .. target.playing .. " players")
+        print("ServerManager → Hopping to server with " .. target.playing .. " players")
         TeleportService:TeleportToPlaceInstance(placeId, target.id, LocalPlayer)
     else
-        warn("No other servers found, using default teleport")
+        print("ServerManager → No other servers found, doing normal teleport")
         TeleportService:Teleport(placeId, LocalPlayer)
     end
 end
