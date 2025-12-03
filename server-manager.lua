@@ -7,7 +7,6 @@ function ServerManager.GetCurrentServerInfo()
 end
 
 function ServerManager.JoinServerById(placeId, jobId)
-    
     TeleportService:TeleportToPlaceInstance(placeId, jobId)
 end
 
