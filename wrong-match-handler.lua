@@ -47,9 +47,9 @@ local function LobbyRefresh()
     pcall(TeleportQueue, LOBBY_REFRESHER_SCRIPT)
 end
 
-if hosterShouldLose == true and MyId == CONS_INFO.hosterId then
+if hosterShouldLose == true and MyId == CONS_INFO.joinerId then
     LobbyRefresh()
-elseif hosterShouldLose == false and MyId == CONS_INFO.joinerId then
+elseif hosterShouldLose == false and MyId == CONS_INFO.hosterId then
     LobbyRefresh()
 else
     local WRONG_WATCH_REJOINER_SCRIPT = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL .. "'))()"  
