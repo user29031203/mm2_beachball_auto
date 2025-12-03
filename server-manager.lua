@@ -23,7 +23,7 @@ end
 -- DEBUG ONLY
 local HttpService = game:GetService("HttpService")
 
-local function getServers(placeId)
+function ServerManager.getServers(placeId)
     local servers = {}
     local cursor = ""
     repeat
@@ -60,7 +60,7 @@ function ServerManager.ChangeServer(placeId)  -- Now JoinSmallestServer really
     placeId = placeId or CONS_INFO.duelsPlaceId
     local player = Players.LocalPlayer
     
-    local servers = getServers(placeId)
+    local servers = ServerManager.getServers(placeId)
     if #servers > 0 then
         -- Pick SMALLEST available server (servers[1] after sort)
         local smallestServer = servers[1]
