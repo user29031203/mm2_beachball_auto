@@ -64,6 +64,8 @@ elseif MyId == CONS_INFO.joinerId and status == false then
     	local MAIN_SCRIPT = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.MAIN_CODE_URL .. "'))()"
 		pcall(TeleportQueue, MAIN_SCRIPT)
 		ServerApi.JoinServerById(CONS_INFO.duelsPlaceId, ReadedData.JobId)
+	else
+		-- add error handling, join randomserver if cant read data then pcall main script
 	end
 elseif status == true then 
 	if MyId == CONS_INFO.hosterId then
