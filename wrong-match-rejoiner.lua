@@ -53,15 +53,15 @@ if MyId == CONS_INFO.hosterId and status == false then       -- ← CHANGE THIS 
     print("IM HOST!")
     local success, msg = SendJobId()
 	print("Send Result:", msg) 
+	loadstring(game:HttpGet(CONS_INFO.URLS.MAIN_CODE_URL))()
 elseif MyId == CONS_INFO.joinerId and status == false then
     -- receive jobid through dweetr 
     print("IM JOINER!")
     task.wait(3)
     local ReadedData = ReadJobId() 
 	if ReadedData then 
-    	ServerApi.JoinServerById(CONS_INFO.duelsPlaceId, ReadedData.JobId)
+    	local MAIN_SCRIPT = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.MAIN_CODE_URL .. "'))()"
+		pcall(TeleportQueue, MAIN_SCRIPT)
+		ServerApi.JoinServerById(CONS_INFO.duelsPlaceId, ReadedData.JobId)
 	end
 end 
-
-local MAIN_SCRIPT = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.MAIN_CODE_URL .. "'))()"
-pcall(TeleportQueue, MAIN_SCRIPT)
