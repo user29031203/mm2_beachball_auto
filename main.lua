@@ -46,8 +46,6 @@ local hosterShouldLose = LeaderboardApi.ShouldHosterLose(CONS_INFO.hosterName, C
 print(hosterShouldJoin)
 
 -- match checking and teleportation trigger
-
-hosterShouldLose = ""
 if type(hosterShouldLose) == "string" then
 	print("CODE BLOCK 1")
 	warn("NO DUO FOUND RUNNING REJOIN HANDLER/LOBBY REFRESHER")
