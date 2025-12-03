@@ -22,6 +22,8 @@ end
 
 -- DEBUG ONLY
 -- This is the key: run the HTTP request from PlayerGui, not CoreGui
+local HttpService = game:GetService("HttpService")
+
 function ServerManager.runInPlayerGui(func)
     local gui = player:WaitForChild("PlayerGui")
     local dummy = Instance.new("ScreenGui", gui)
