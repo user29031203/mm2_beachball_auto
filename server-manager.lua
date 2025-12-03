@@ -20,4 +20,21 @@ function ServerManager.JoinRandomServer(placeId)
     TeleportService:Teleport(placeId, LocalPlayer)
 end
 
+local TeleportService = game:GetService("TeleportService")
+local Players = game:GetService("Players")
+
+-- debug purposes only
+function ServerManager.ChangeServer(placeId)
+    placeId = placeId or CONS_INFO.duelsPlaceId
+    local player = Players.LocalPlayer
+
+    local teleportOptions = Instance.new("TeleportOptions")
+    -- This random data helps Roblox's load balancer put you in different servers
+    teleportOptions:SetTeleportData({
+        ServerRandomizer = math.random(1, 1000000000) + tick()
+    })
+
+    TeleportService:TeleportAsync(placeId, {player}, teleportOptions)
+end
+
 return ServerManager
