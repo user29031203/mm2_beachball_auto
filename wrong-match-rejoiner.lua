@@ -42,10 +42,9 @@ local function ReadJobId()
         print("SUCCESS! Read back JobId:", data.JobId, "\nCreated Time:", createdTime)
 	else
         warn("Failed to read data.")
-		return false
     end
     
-    return data
+    return data, createdTime
 end
 
 if MyId == CONS_INFO.hosterId and status == false then       -- ← CHANGE THIS TO ALT1'S USERID
