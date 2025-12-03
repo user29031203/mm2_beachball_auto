@@ -1,5 +1,3 @@
-print("ERROR DEBUGGER A")
-
 local Players = game:GetService("Players") 
 local LocalPlayer = Players.LocalPlayer
 local MyId = LocalPlayer.UserId
@@ -9,6 +7,7 @@ local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
 
 -- external libs
 local LeaderboardApi = loadstring(game:HttpGet(CONS_INFO.URLS.LEADERBOARD_LIB_URL))()
+local ServerApi = loadstring(game:HttpGet(CONS_INFO.URLS.SERVER_MANAGER_URL))()
 --[[local DweetLib = loadstring(game:HttpGet(CONS_INFO.URLS.DWEETR_LIB_URL))()
 local Comm = DweetLib.new(CONS_INFO.mySecretKey)]]
 
@@ -23,6 +22,11 @@ if not TeleportQueue then
 end
 
 local status = LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName)
+local hosterJobId
+
+if MyId == CONS_INFO.hosterId then
+    hosterJobId = ServerApi.GetCurrentServerInfo().JobId
+end
 
 if MyId == CONS_INFO.hosterId and status == false then        -- ← CHANGE THIS TO ALT1'S USERID
     -- send jobid through dweetr
@@ -30,6 +34,7 @@ if MyId == CONS_INFO.hosterId and status == false then        -- ← CHANGE THIS
 elseif MyId == CONS_INFO.joinerId and status == false then
     -- receive jobid through dweetr 
     print("IM JOINER!")
+    
 end 
 
 pcall(TeleportQueue, "return")
