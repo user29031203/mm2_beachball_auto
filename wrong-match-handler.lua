@@ -52,8 +52,8 @@ if hosterShouldLose == true and MyId == CONS_INFO.hosterId then
 elseif hosterShouldLose == false and MyId == CONS_INFO.joinerId then
     LobbyRefresh()
 else
-    local WrongMatchRejoiner, hosterShouldLose = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL .. "'))()"  
-    pcall(TeleportQueue, WrongMatchRejoiner)
+    local WRONG_WATCH_REJOINER_SCRIPT = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL .. "'))()"  
+    pcall(TeleportQueue, WRONG_WATCH_REJOINER_SCRIPT)
 end
 
 return CheckAndHandleMatching()
