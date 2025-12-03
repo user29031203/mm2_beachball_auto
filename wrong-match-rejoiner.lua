@@ -1,5 +1,6 @@
 local CONS_INFO_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/constants.lua" 
 local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
+local Players = game:GetService("Players") 
 local LocalPlayer = Players.LocalPlayer
 local MyId = LocalPlayer.UserId
 
