@@ -53,7 +53,7 @@ if MyId == CONS_INFO.hosterId and status == false then       -- ← CHANGE THIS 
     print("IM HOST!")
     local success, msg = SendJobId()
 	print("Send Result:", msg) 
-	task.wait(4)
+	task.wait(3)
 	loadstring(game:HttpGet(CONS_INFO.URLS.MAIN_CODE_URL))()
 elseif MyId == CONS_INFO.joinerId and status == false then
     -- receive jobid through dweetr 
@@ -66,5 +66,6 @@ elseif MyId == CONS_INFO.joinerId and status == false then
 		ServerApi.JoinServerById(CONS_INFO.duelsPlaceId, ReadedData.JobId)
 	end
 elseif status == true then 
+	task.wait(4)
 	loadstring(game:HttpGet(CONS_INFO.URLS.MAIN_CODE_URL))()
 end 
