@@ -1,15 +1,17 @@
-local Players = game:GetService("Players") 
+local TeleportService = game:GetService("TeleportService")
+local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
+local PathfindingService = game:GetService("PathfindingService")
 local MyId = LocalPlayer.UserId
 
 local CONS_INFO_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/constants.lua" 
 local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
 
--- external libs
+-- External Libs 
+local TELEPORT_HANDLER_SCRIPT = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.TELEPORT_HANDLER_URL .. "'))()"
+local MATCH_HANDLER_SCRIPT = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.WRONG_MATCH_HANDLER_URL .. "'))()"
 local LeaderboardApi = loadstring(game:HttpGet(CONS_INFO.URLS.LEADERBOARD_LIB_URL))()
-local ServerApi = loadstring(game:HttpGet(CONS_INFO.URLS.SERVER_MANAGER_URL))()
-local DweetLib = loadstring(game:HttpGet(CONS_INFO.URLS.DWEETR_LIB_URL))()
-local Comm = DweetLib.new(CONS_INFO.mySecretKey)
+local MovementApi = loadstring(game:HttpGet(CONS_INFO.URLS.MOVEMENT_LIB_URL))()
 
 -- teleportatin support 
 local TeleportQueue = queue_on_teleport 
@@ -21,49 +23,54 @@ if not TeleportQueue then
     return
 end
 
-local status = LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName)
-local hosterJobId
+-- be sure everything imported without problems
 
---ServerApi.GetCurrentServerInfo().JobId
-
-local function SendJobId()
-    print("Sending data to dweetr.io...")
-    return Comm:Send({
-        Status = "Working",
-        JobId = game.JobId,
-        Time = 0
-    })
+libs = {LeaderboardApi, MovementApi, CONS_INFO}
+for i=0, 4 do
+    print(type(libs[i]))
 end
 
-local function ReadJobId()
-	--task.wait(2.5) -- fix it by perfect 30 seconds limited waiting
-    local data, createdTime = Comm:GetLatest()
-
-    if data then
-        print("SUCCESS! Read back JobId:", data.JobId, "\nCreated Time:", createdTime)
-	else
-        warn("Failed to read data.")
-		return false
-    end
-    
-    return data
+if (type(LeaderboardApi) == "table") and
+   (type(MovementApi) == "table") and 
+   (type(CONS_INFO) == "table") then
+    print("All modules loaded successfully!")
+else
+    warn("CRITICAL: One or more modules failed to load.")
+    -- Optional: Stop script
+    --return 
 end
 
-status = false
 
-if MyId == CONS_INFO.hosterId and status == false then       -- ← CHANGE THIS TO ALT1'S USERID
-    -- send jobid through dweetr
-    print("IM HOST!")
-    local success, msg = SendJobId()
-	print("Send Result:", msg) 
-elseif MyId == CONS_INFO.joinerId and status == false then
-    -- receive jobid through dweetr 
-    print("IM JOINER!")
+-- get points of both client
+local hosterShouldLose = LeaderboardApi.ShouldHosterLose(CONS_INFO.hosterName, CONS_INFO.joinerName)
+print(hosterShouldJoin)
+
+-- move alts to queue area
+MovementApi.SmartWalkTo(MovementApi.HosterPos)
+
+-- match checking and teleportation trigger
+
+hosterShouldLose = true
+if type(hosterShouldLose) == "string" then
+	warn("NO DUO FOUND RUNNING REJOIN HANDLER/LOBBY REFRESHER")
     task.wait(3)
-    local ReadedData = ReadJobId() 
-	if ReadedData then 
-    	ServerApi.JoinServerById(CONS_INFO.duelsPlaceId, ReadedData.JobId)
-	end
+    local WRONG_WATCH_REJOINER_SCRIPT = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL .. "'))()"  
+    pcall(TeleportQueue, WRONG_WATCH_REJOINER_SCRIPT)
+	--return
+elseif MyId == CONS_INFO.hosterId and hosterShouldLose == true then        -- ← CHANGE THIS TO ALT1'S USERID
+    print("IM A2 -- HOST")
+    pcall(TeleportQueue, TELEPORT_HANDLER_SCRIPT) 
+elseif MyId == CONS_INFO.joinerId and hosterShouldLose == false then    -- ← CHANGE THIS TO ALT2'S USERID 
+    print("IM CD -- JOINER")
+    pcall(TeleportQueue, TELEPORT_HANDLER_SCRIPT) 
+else
+    print("Unknown alt - check UserIds")
 end 
 
-pcall(TeleportQueue, "return")
+if MyId == CONS_INFO.joinerId and hosterShouldLose == true then
+    pcall(TeleportQueue, MATCH_HANDLER_SCRIPT)
+	print("JOINER MATCHHANDLING ACTIVATED!")
+elseif MyId == CONS_INFO.hosterId and hosterShouldLose == false then
+    pcall(TeleportQueue, MATCH_HANDLER_SCRIPT)
+	print("HOSTER MATCHHANDLING ACTIVATED!")
+end
