@@ -27,8 +27,9 @@ local function CheckAndHandleMatching()
         local status = LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName)
         -- true was status, it changed to true for testing purposes only
         if status then
-            --local hosterShouldLose = LeaderboardApi.ShouldHosterLose(CONS_INFO.hosterName, CONS_INFO.joinerName)
-            return true
+            local hosterShouldLose = LeaderboardApi.ShouldHosterLose(CONS_INFO.hosterName, CONS_INFO.joinerName)
+            
+            return true, hosterShouldLose 
         else 
             print("Matched with a random!")
             ServerApi.JoinRandomServer()
@@ -40,7 +41,12 @@ local function CheckAndHandleMatching()
     end
 end
 
-local WrongMatchRejoiner = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL .. "'))()"  
-pcall(TeleportQueue, WrongMatchRejoiner)
+if hosterShouldLose == true and MyId == CONS_INFO.hosterId then
+    local LOBBY_REFRESHER_SCRIPT = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.LOBBY_REFRESHER_URL .. "'))()"
+    pcall(TeleportQueue, LOBBY_REFRESHER_SCRIPT)
+else  
+    local WrongMatchRejoiner, hosterShouldLose = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL .. "'))()"  
+    pcall(TeleportQueue, WrongMatchRejoiner)
+end
 
 return CheckAndHandleMatching()
