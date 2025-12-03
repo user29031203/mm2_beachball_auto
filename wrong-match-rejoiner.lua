@@ -66,6 +66,10 @@ elseif MyId == CONS_INFO.joinerId and status == false then
 		ServerApi.JoinServerById(CONS_INFO.duelsPlaceId, ReadedData.JobId)
 	end
 elseif status == true then 
-	task.wait(4)
-	loadstring(game:HttpGet(CONS_INFO.URLS.MAIN_CODE_URL))()
+	if MyId == CONS_INFO.hosterId then
+		task.wait(4)
+		loadstring(game:HttpGet(CONS_INFO.URLS.MAIN_CODE_URL))()
+	else
+		loadstring(game:HttpGet(CONS_INFO.URLS.MAIN_CODE_URL))()
+	end
 end 
