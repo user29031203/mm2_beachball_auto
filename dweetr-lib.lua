@@ -74,6 +74,7 @@ function DweetLib:GetLatest()
     local response = httpRequest({
         Url = url,
         Method = "GET", 
+        Timeout = 3,
         Headers = {
             ["Cache-Control"] = "no-cache",
             ["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" -- Standard User Agent
@@ -84,7 +85,7 @@ function DweetLib:GetLatest()
     
      -- CHECK 1: Did we get a response table?
     if not response then
-        return nil, "Request Failed (No response)"
+        return nil, "Connection Failed (Is Server Running?): " .. tostring(response)
     end
 
     -- CHECK 2: Is the Status OK? (200 means success)
