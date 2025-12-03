@@ -81,7 +81,7 @@ function ServerManager.getSmallestServer(placeId)
 end
 
 -- MAIN FUNCTION - CALL THIS
-function ServerManager.JoinRandomServer(placeId)
+function ServerManager.ChangeServer(placeId)
     placeId = placeId or CONS_INFO.duelsPlaceId
 
     -- Quick hop if same place
