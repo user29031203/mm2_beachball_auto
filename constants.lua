@@ -16,6 +16,7 @@ local consInfo = {
     hosterId = 9359470613, -- A2
     joinerId = 9359433164,
     mySecretKey = "21bdef3f9b5a7e65db63ea9ac3d9f34a",
+    duelsPlaceId = 12360882630,
     generalTimeout = 4.5,
     URLS = {
         TELEPORT_HANDLER_URL     = "teleport-handler.lua",
