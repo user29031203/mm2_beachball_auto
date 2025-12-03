@@ -65,7 +65,6 @@ elseif MyId == CONS_INFO.joinerId and status == false then
 		ServerApi.JoinServerById(CONS_INFO.duelsPlaceId, ReadedData.JobId)
 	else
 		ServerManager.JoinRandomServer()
-		-- add error handling, join randomserver if cant read data then pcall main script
 	end
 elseif status == true then 
 	if MyId == CONS_INFO.hosterId then
