@@ -71,22 +71,38 @@ function DweetLib:GetLatest()
     print("DEBUGGER B1")
     local url = self.BaseUrl .. "/get/latest/dweet/for/" .. self.ThingName
     
-    local success, result = pcall(function()
-        -- Add _nocache to force fresh data
-        --game:HttpGet(url .. "?_nocache=" .. os.time(), true) 
-        return game:HttpGet(url, true) 
-    end)
+    local response = httpRequest({
+        Url = url,
+        Method = "GET", 
+        Headers = {
+            ["Cache-Control"] = "no-cache",
+            ["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" -- Standard User Agent
+        }
+    })
 
     print("DEBUGGER B2")
-    print("Successs", success)
-    print("Result", result)
-
-    if not success or type(result) == "table" then 
-        print("its not table!")
-        return nil, "Connection Error" 
+    
+     -- CHECK 1: Did we get a response table?
+    if not response then
+        return nil, "Request Failed (No response)"
     end
 
-    local decoded = HttpService:JSONDecode(result)
+    -- CHECK 2: Is the Status OK? (200 means success)
+    if response.StatusCode ~= 200 then
+        return nil, "HTTP Error: " .. tostring(response.StatusCode)
+    end
+    
+     if not response.Body or response.Body == "" then
+        return nil, "Response Body is empty"
+    end
+
+    local success, decoded = pcall(function()
+        return HttpService:JSONDecode(response.Body)
+    end)
+
+    if not success then
+        return nil, "JSON Decode Error"
+    end
     
     print(type(decoded))
     print("DEBUGGER B3")
