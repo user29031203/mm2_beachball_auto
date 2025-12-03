@@ -35,7 +35,7 @@ local function raw(file)
 end
 
 for key, fileName in pairs(URLS) do
-    URLS[key] = BASE_RAW_URL .. fileName
+    consInfo.URLS[key] = BASE_RAW_URL .. fileName
 end
 
 return consInfo
