@@ -34,7 +34,7 @@ local function raw(file)
     return ("https://raw.githubusercontent.com/%s/%s/%s/%s"):format(OWNER, REPO, sha, file:gsub("^/*", ""))
 end
 
-for key, fileName in pairs(URLS) do
+for key, fileName in pairs(consInfo.URLS) do
     consInfo.URLS[key] = BASE_RAW_URL .. fileName
 end
 
