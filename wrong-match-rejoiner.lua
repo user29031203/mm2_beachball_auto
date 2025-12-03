@@ -48,8 +48,6 @@ local function ReadJobId()
     return data
 end
 
-status = false
-
 if MyId == CONS_INFO.hosterId and status == false then       -- ← CHANGE THIS TO ALT1'S USERID
     -- send jobid through dweetr
     print("IM HOST!")
