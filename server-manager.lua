@@ -68,7 +68,7 @@ function ServerManager.ChangeServer(placeId)
     else
         -- Fallback: Normal teleport (might go to popular)
         warn("No low-pop servers found, falling back to default")
-        JoinRandomServer()
+        --JoinRandomServer()
     end
 end
 -- DEBUG ONLY
