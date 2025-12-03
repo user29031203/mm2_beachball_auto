@@ -89,8 +89,8 @@ function ServerManager.ChangeServer(placeId)
             target = servers[2]
         end
         print("Joining smallest server:", target.playing .. " players")
-        task.wait(5)
-        TeleportService:TeleportToPlaceInstance(placeId, target.id, player)
+         print(target.id)
+        --TeleportService:TeleportToPlaceInstance(placeId, target.id, player)
     else
         warn("No alternative servers found, using default teleport")
         --TeleportService:Teleport(placeId, player)
