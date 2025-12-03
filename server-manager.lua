@@ -24,78 +24,80 @@ end
 -- This is the key: run the HTTP request from PlayerGui, not CoreGui
 local HttpService = game:GetService("HttpService")
 
-function ServerManager.runInPlayerGui(func)
-    local gui = player:WaitForChild("PlayerGui")
-    local dummy = Instance.new("ScreenGui", gui)
-    local script = Instance.new("LocalScript", dummy)
-    
-    local connection
-    connection = script.AncestryChanged:Connect(function()
-        if script.Parent == gui then
-            connection:Disconnect()
-            func()
-            dummy:Destroy()
+-- Safe HTTP that bypasses CoreGui block
+function ServerManager.safeHttpGet(url)
+    local success, result = pcall(HttpService.GetAsync, HttpService, url, false)
+    if success then return result end
+
+    -- Blocked? Run in PlayerGui
+    local pg = LocalPlayer:WaitForChild("PlayerGui", 5)
+    if not pg then return nil end
+
+    local gui = Instance.new("ScreenGui", pg)
+    local scr = Instance.new("LocalScript", gui)
+    local finished = false
+
+    scr.AncestryChanged:Connect(function()
+        if scr.Parent == pg then
+            local ok, res = pcall(HttpService.GetAsync, HttpService, url, false)
+            if ok then result = res end
+            finished = true
+            gui:Destroy()
         end
     end)
+
+    local waited = 0
+    while not finished and waited < 3 do
+        task.wait(0.1)
+        waited += 0.1
+    end
+    return result
 end
 
-function ServerManager.getServers(placeId)
+-- Get smallest available server (not current, not full)
+function ServerManager.getSmallestServer(placeId)
     local servers = {}
     local cursor = ""
-    
+
     repeat
-        local url = ("https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=Asc&limit=100"):format(placeId)
+        local url = "https://games.roblox.com/v1/games/" .. placeId .. "/servers/Public?sortOrder=Asc&limit=100"
         if cursor ~= "" then url = url .. "&cursor=" .. cursor end
 
-        local success, result = pcall(function()
-            return HttpService:GetAsync(url, false)
-        end)
+        local response = ServerManager.safeHttpGet(url)
+        if not response then break end
 
-        if not success then
-            warn("HTTP failed (blocked?), retrying in PlayerGui context...")
-            -- Retry once in safe context
-            local retrySuccess = false
-            ServerManager.runInPlayerGui(function()
-                local ok, res = pcall(HttpService.GetAsync, HttpService, url, false)
-                if ok then
-                    result = res
-                    retrySuccess = true
-                end
-            end)
-            -- Wait a moment for retry
-            task.wait(1)
-            if not retrySuccess then break end
-        end
-
-        local data = HttpService:JSONDecode(result)
+        local data = HttpService:JSONDecode(response)
         for _, server in ipairs(data.data or {}) do
             if server.playing < server.maxPlayers and server.id ~= game.JobId then
                 table.insert(servers, server)
             end
         end
         cursor = data.nextPageCursor or ""
-        task.wait(0.2) -- Avoid rate-limit
+        task.wait(0.3)
     until not cursor
 
     table.sort(servers, function(a, b) return a.playing < b.playing end)
-    return servers
+    return servers[1] or servers[2] or servers[3]
 end
 
-function ServerManager.ChangeServer(placeId)
+-- MAIN FUNCTION - CALL THIS
+function ServerManager.JoinRandomServer(placeId)
     placeId = placeId or CONS_INFO.duelsPlaceId
-    local servers = ServerManager.getServers(placeId)
-    
-    if #servers > 0 then
-        local target = servers[1]  -- smallest
-        if target.id == game.JobId and #servers > 1 then
-            target = servers[2]
-        end
-        print("Joining smallest server:", target.playing .. " players")
-         print(target.id)
-        --TeleportService:TeleportToPlaceInstance(placeId, target.id, player)
+
+    -- Quick hop if same place
+    if placeId == game.PlaceId then
+        TeleportService:Teleport(placeId, LocalPlayer)
+        return
+    end
+
+    local target = ServerManager.getSmallestServer(placeId)
+
+    if target then
+        print("Hopping to server with " .. target.playing .. " players")
+        TeleportService:TeleportToPlaceInstance(placeId, target.id, LocalPlayer)
     else
-        warn("No alternative servers found, using default teleport")
-        --TeleportService:Teleport(placeId, player)
+        warn("No other servers found, using default teleport")
+        TeleportService:Teleport(placeId, LocalPlayer)
     end
 end
 -- DEBUG ONLY
