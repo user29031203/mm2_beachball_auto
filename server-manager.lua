@@ -81,13 +81,6 @@ end
 
 function ServerManager.ChangeServer(placeId)
     placeId = placeId or CONS_INFO.duelsPlaceId
-
-    if placeId == game.PlaceId then
-        -- Same place? Just quick hop (usually works)
-        TeleportService:Teleport(game.PlaceId, player)
-        return
-    end
-
     local servers = ServerManager.getServers(placeId)
     
     if #servers > 0 then
