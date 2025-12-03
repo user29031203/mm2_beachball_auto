@@ -24,17 +24,42 @@ local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
 
 -- debug purposes only
-function ServerManager.ChangeServer(placeId)
-    placeId = placeId or CONS_INFO.duelsPlaceId
-    local player = Players.LocalPlayer
+local HttpService = game:GetService("HttpService")
+local TeleportService = game:GetService("TeleportService")
 
-    local teleportOptions = Instance.new("TeleportOptions")
-    -- This random data helps Roblox's load balancer put you in different servers
-    teleportOptions:SetTeleportData({
-        ServerRandomizer = math.random(1, 1000000000) + tick()
-    })
-
-    TeleportService:TeleportAsync(placeId, {player}, teleportOptions)
+local function getServers(placeId)
+    local cursor = ""
+    local servers = {}
+    repeat
+        local url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Asc&limit=100", placeId)
+        if cursor ~= "" then url = url .. "&cursor=" .. cursor end
+        
+        local success, result = pcall(function()
+            return HttpService:GetAsync(url)
+        end)
+        
+        if success then
+            local data = HttpService:JSONDecode(result)
+            for _, server in pairs(data.data) do
+                if server.playing < server.maxPlayers and server.id ~= game.JobId then
+                    table.insert(servers, server)
+                end
+            end
+            cursor = data.nextPageCursor
+        end
+    until not cursor
+    
+    return servers
 end
 
-return ServerManager
+-- debug only
+function ServerManager.ChangeServer(placeId)
+    placeId = placeId or CONS_INFO.duelsPlaceId
+    local servers = getServers(placeId)
+    if #servers > 0 then
+        local randomServer = servers[math.random(1, #servers)]
+        TeleportService:TeleportToPlaceInstance(placeId, randomServer.id, Players.LocalPlayer)
+    else
+        warn("No available servers found")
+    end
+end
