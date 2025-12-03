@@ -41,10 +41,17 @@ local function CheckAndHandleMatching()
     end
 end
 
-if hosterShouldLose == true and MyId == CONS_INFO.hosterId then
+-- lobby refresh to prevent qeueuing with someone else after win
+local function LobbyRefresh()
     local LOBBY_REFRESHER_SCRIPT = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.LOBBY_REFRESHER_URL .. "'))()"
     pcall(TeleportQueue, LOBBY_REFRESHER_SCRIPT)
-else  
+end
+
+if hosterShouldLose == true and MyId == CONS_INFO.hosterId then
+    LobbyRefresh()
+elseif hosterShouldLose == false and MyId == CONS_INFO.joinerId then
+    LobbyRefresh()
+else
     local WrongMatchRejoiner, hosterShouldLose = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL .. "'))()"  
     pcall(TeleportQueue, WrongMatchRejoiner)
 end
