@@ -3,6 +3,10 @@ local HttpService = game:GetService("HttpService")
 local DweetLib = {}
 DweetLib.__index = DweetLib
 
+-- external libs
+local CONS_INFO_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/constants.lua" 
+local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
+
 -- 1. HTTP Request Compatibility
 local httpRequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
 
@@ -15,9 +19,7 @@ function DweetLib.new(thingName)
 
     local self = setmetatable({}, DweetLib)
     self.ThingName = thingName
-    
-    -- UPDATED: Using dweetr.io as requested
-    self.BaseUrl = "https://dweetr.io" 
+    self.BaseUrl = CONS_INFO.BackendBaseEndpointUrl 
     
     return self
 end
