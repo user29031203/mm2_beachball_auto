@@ -79,6 +79,8 @@ function DweetLib:GetLatest()
     if not success then return nil, "Connection Error" end
 
     local decoded = HttpService:JSONDecode(result)
+
+    print(type(decoded))
     
     -- dweetr.io follows the same JSON structure: { "with": [ { "content": { ... } } ] }
     if decoded and decoded.with and decoded.with[1] then
