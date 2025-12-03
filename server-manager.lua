@@ -84,12 +84,6 @@ end
 function ServerManager.ChangeServer(placeId)
     placeId = placeId or CONS_INFO.duelsPlaceId
 
-    -- Quick hop if same place
-    if placeId == game.PlaceId then
-        TeleportService:Teleport(placeId, LocalPlayer)
-        return
-    end
-
     local target = ServerManager.getSmallestServer(placeId)
 
     if target then
