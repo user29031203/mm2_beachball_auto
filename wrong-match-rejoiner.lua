@@ -22,9 +22,6 @@ if not TeleportQueue then
 end
 
 local status = LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName)
-local hosterJobId
-
---ServerApi.GetCurrentServerInfo().JobId
 
 local function SendJobId()
     print("Sending data to dweetr.io...")
