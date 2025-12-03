@@ -47,6 +47,7 @@ local function LobbyRefresh()
     pcall(TeleportQueue, LOBBY_REFRESHER_SCRIPT)
 end
 
+local IsDuoMatched, hosterShouldLose = CheckAndHandleMatching()
 if hosterShouldLose == true and MyId == CONS_INFO.joinerId then
     LobbyRefresh()
 elseif hosterShouldLose == false and MyId == CONS_INFO.hosterId then
@@ -56,4 +57,4 @@ else
     pcall(TeleportQueue, WRONG_WATCH_REJOINER_SCRIPT)
 end
 
-return CheckAndHandleMatching()
+return IsDuoMatched
