@@ -9,8 +9,8 @@ local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
 local teleportConnection
 
 local ServerManager = {
-    RETRY_DELAY = 2, -- Seconds between retries
-    TIMEOUT_WAIT = 10 -- How long to wait for a failure signal before assuming success
+    RETRY_DELAY = 3, -- Seconds between retries
+    TIMEOUT_WAIT = 4 -- How long to wait for a failure signal before assuming success
 }
 
 function ServerManager.GetCurrentServerInfo()
@@ -19,7 +19,7 @@ end
 
 function ServerManager.JoinServerById(placeId, jobId, shouldRepeat)
     -- If repeat is true, try 5 times. If false, try 1 time.
-    local MAX_RETRIES = shouldRepeat and 5 or 1
+    local MAX_RETRIES = shouldRepeat and 3 or 1
     local attemptCount = 0
 
     while attemptCount < MAX_RETRIES do
