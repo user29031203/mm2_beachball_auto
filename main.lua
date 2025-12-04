@@ -47,7 +47,7 @@ if type(hosterShouldLose) == "string" then
 	print("CODE BLOCK 1")
 	warn("NO DUO FOUND RUNNING REJOIN HANDLER/LOBBY REFRESHER")
     task.wait(0.2)
-    loadstring(game:HttpGet(CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL))()
+    CONS_INFO.Load(CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL)
 elseif MyId == CONS_INFO.hosterId and hosterShouldLose == true then        -- ← CHANGE THIS TO ALT1'S USERID
     print("CODE BLOCK 2")
 	print("IM A2 -- HOST")
