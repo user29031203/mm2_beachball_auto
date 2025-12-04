@@ -1,6 +1,9 @@
+local offlineModuleLoad = true  -- <== SET THIS TO TRUE FOR LOCAL DEV -- The folder name in your Executor's Workspace
 local OWNER = "user29031203"
 local REPO  = "LegendZero"      
 local BRANCH = "main"         
+local localFolder = "LegendZero"
+
 
 local consInfo = {
     hosterName = "X0010010",
@@ -31,9 +34,55 @@ local function raw(file)
     return ("https://raw.githubusercontent.com/%s/%s/refs/heads/%s/%s"):format(OWNER, REPO, BRANCH, file)
 end
 
--- hot reload
+-- Helper to format paths
+local function getPath(file)
+    if offlineModuleLoad then
+        -- Returns local path: "MyProject/main.lua"
+        return localFolder .. "/" .. file
+    else
+        -- Returns GitHub URL
+        return raw(file)
+    end
+end
+
+-- Update the table with the correct paths/urls
 for key, fileName in pairs(consInfo.URLS) do
-    consInfo.URLS[key] = raw(fileName)
+    consInfo.URLS[key] = getPath(fileName)
+end
+
+---------------------------------------------------------------------
+-- NEW FUNCTION: Handles the loading logic based on mode
+---------------------------------------------------------------------
+
+function consInfo.GetContent(pathOrUrl)
+    if not pathOrUrl then 
+        return warn("Module Key not found:", key) 
+    end
+
+    if offlineModuleLoad then
+        -- LOCAL MODE: Use readfile()
+        -- Most executors support isfile() to check existence
+        if isfile and not isfile(pathOrUrl) then
+            error("[Local Dev] File not found in workspace: " .. pathOrUrl)
+        end
+        
+        print("[Local Dev] Loading:", pathOrUrl)
+        local content = readfile(pathOrUrl) -- Executor API
+        return content
+    else
+        -- ONLINE MODE: Use game:HttpGet()
+        -- print("[Online] Fetching:", pathOrUrl)
+        return content
+    end
+end
+
+
+function consInfo.Load(content)
+    if offlineModuleLoad then
+		return loadstring(content)()
+	else
+		return loadstring(game:HttpGet(pathOrUrl))()
+	end
 end
 
 return consInfo
