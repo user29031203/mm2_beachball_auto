@@ -70,5 +70,4 @@ if type(hosterShouldLose) ~= "string" then
 	elseif MyId == CONS_INFO.joinerId then
 		MovementApi.SmartWalkTo(MovementApi.JoinerPos)
 	end
-	MovementApi.SmartWalkTo(MovementApi.HosterPos)
 end
