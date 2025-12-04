@@ -1,3 +1,7 @@
+
+--DEBUGCONSOLE
+game:GetService("StarterGui"):SetCore("DevConsoleVisible", true)
+
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local MyId = LocalPlayer.UserId
