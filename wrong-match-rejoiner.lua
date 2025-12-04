@@ -70,13 +70,8 @@ elseif MyId == CONS_INFO.joinerId and status == false then
 			loadstring(game:HttpGet(CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL))()
 		end
 	else
-		ServerManager.JoinRandomServer()
+		ServerApi.JoinRandomServer()
 	end
 elseif status == true then 
-	if MyId == CONS_INFO.hosterId then
-		--task.wait(4)
-		loadstring(game:HttpGet(CONS_INFO.URLS.MAIN_CODE_URL))()
-	else
-		loadstring(game:HttpGet(CONS_INFO.URLS.MAIN_CODE_URL))()
-	end
+	loadstring(game:HttpGet(CONS_INFO.URLS.MAIN_CODE_URL))()
 end 
