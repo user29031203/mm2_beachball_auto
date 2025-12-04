@@ -88,7 +88,10 @@ end
 
 function consInfo.Load(pathOrUrl)
 	local content = consInfo.GetContent(pathOrUrl)
-
+	if not content then
+		warn("Content is returned nil!")
+	end
+		
 	if offlineModuleLoad then
 		return loadstring(content)()
 	else
