@@ -9,8 +9,8 @@ local MyId = LocalPlayer.UserId
 local CONS_INFO_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/constants.lua" 
 local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
 
-local ServerApi = loadstring(game:HttpGet(CONS_INFO.URLS.SERVER_MANAGER_URL))()
-local LeaderboardApi = loadstring(game:HttpGet(CONS_INFO.URLS.LEADERBOARD_LIB_URL))()
+local ServerApi = CONS_INFO.Load(CONS_INFO.URLS.SERVER_MANAGER_URL)
+local LeaderboardApi = CONS_INFO.Load(CONS_INFO.URLS.LEADERBOARD_LIB_URL)
 
 -- initialize executor specific required APIs
 local TeleportQueue = loadstring(game:HttpGet(CONS_INFO.URLS.EXECUTOR_API_INIT_URL))()
@@ -40,7 +40,7 @@ end
 
 -- lobby refresh to prevent qeueuing with someone else after win
 local function LobbyRefresh()
-    local LOBBY_REFRESHER_SCRIPT = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.LOBBY_REFRESHER_URL .. "'))()"
+    local LOBBY_REFRESHER_SCRIPT = CONS_INFO.GetReadyLoadText(CONS_INFO.URLS.LOBBY_REFRESHER_URL)
     pcall(TeleportQueue, LOBBY_REFRESHER_SCRIPT)
 end
 
@@ -50,7 +50,7 @@ if hosterShouldLose == true and MyId == CONS_INFO.joinerId then
 elseif hosterShouldLose == false and MyId == CONS_INFO.hosterId then
     LobbyRefresh()
 else
-    local WRONG_WATCH_REJOINER_SCRIPT = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL .. "'))()"  
+    local WRONG_WATCH_REJOINER_SCRIPT = CONS_INFO.GetReadyLoadText(CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL)
     pcall(TeleportQueue, WRONG_WATCH_REJOINER_SCRIPT)
 end
 
