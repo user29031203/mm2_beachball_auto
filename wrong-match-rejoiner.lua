@@ -12,9 +12,9 @@ local CONS_INFO_URL = "https://raw.githubusercontent.com/user29031203/LegendZero
 local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
 
 -- external libs
-local LeaderboardApi = loadstring(game:HttpGet(CONS_INFO.URLS.LEADERBOARD_LIB_URL))()
-local ServerApi = loadstring(game:HttpGet(CONS_INFO.URLS.SERVER_MANAGER_URL))()
-local DweetLib = loadstring(game:HttpGet(CONS_INFO.URLS.DWEETR_LIB_URL))()
+local ServerApi = CONS_INFO.Load(CONS_INFO.URLS.SERVER_MANAGER_URL)
+local LeaderboardApi = CONS_INFO.Load(CONS_INFO.URLS.LEADERBOARD_LIB_URL)
+local DweetLib = CONS_INFO.Load(CONS_INFO.URLS.DWEETR_LIB_URL)
 local Comm = DweetLib.new(CONS_INFO.mySecretKey)
 
 -- initialize executor specific required APIs
@@ -59,11 +59,11 @@ if MyId == CONS_INFO.hosterId and _G.status == false then       -- ← CHANGE TH
     print("IM HOST!")
     local success, msg = SendJobId()
 	print("Send Result:", msg) 
-	loadstring(game:HttpGet(CONS_INFO.URLS.MAIN_CODE_URL))()
+	CONS_INFO.Load(CONS_INFO.URLS.MAIN_CODE_URL)
 elseif MyId == CONS_INFO.joinerId and _G.status == false then
     -- receive jobid through dweetr 
     print("IM JOINER!")
-	local MAIN_SCRIPT = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.MAIN_CODE_URL .. "'))()"
+	local MAIN_SCRIPT = CONS_INFO.GetReadyLoadText(CONS_INFO.URLS.MAIN_CODE_URL)
 	pcall(TeleportQueue, MAIN_SCRIPT)
     local ReadedData, msg = ReadJobId() 
 	if ReadedData then 
@@ -72,7 +72,7 @@ elseif MyId == CONS_INFO.joinerId and _G.status == false then
 		    print("Success Joiner Worked: " .. result)
 		else
 		    warn("Final/Final!! Failure!!: " .. result)
-			loadstring(game:HttpGet(CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL))()
+			CONS_INFO.Load(CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL)
 		end
 	else
 		ServerApi.JoinRandomServer()
