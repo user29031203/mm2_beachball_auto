@@ -58,9 +58,16 @@ end
 if MyId == CONS_INFO.joinerId and hosterShouldLose == true then
 	pcall(TeleportQueue, MATCH_HANDLER_SCRIPT)
 	print("JOINER MATCHHANDLING ACTIVATED!")
-	MovementApi.SmartWalkTo(MovementApi.JoinerPos)
 elseif MyId == CONS_INFO.hosterId and hosterShouldLose == false then
     pcall(TeleportQueue, MATCH_HANDLER_SCRIPT)
 	print("HOSTER MATCHHANDLING ACTIVATED!")
+end
+
+if type(hosterShouldLose) ~= "string" then
+	if MyId == CONS_INFO.hosterId then
+		MovementApi.SmartWalkTo(MovementApi.HosterPos)
+	elseif MyId == CONS_INFO.joinerId then
+		MovementApi.SmartWalkTo(MovementApi.JoinerPos)
+	end
 	MovementApi.SmartWalkTo(MovementApi.HosterPos)
 end
