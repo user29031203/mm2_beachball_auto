@@ -19,6 +19,7 @@ local consInfo = {
     duelsPlaceId = 12360882630,
     generalTimeout = 4.5,
     BackendBaseEndpointUrl = "http://192.168.1.128:5000",
+    instantQueuePrevent = false,
     URLS = {
         TELEPORT_HANDLER_URL     = "teleport-handler.lua",
         DWEETR_LIB_URL           = "dweetr-lib.lua",
