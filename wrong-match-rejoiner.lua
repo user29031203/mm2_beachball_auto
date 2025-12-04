@@ -1,3 +1,7 @@
+
+--DEBUGCONSOLE
+game:GetService("StarterGui"):SetCore("DevConsoleVisible", true)
+
 print("DEBUGGER A1")
 
 local Players = game:GetService("Players") 
