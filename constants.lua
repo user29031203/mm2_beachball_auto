@@ -77,7 +77,19 @@ function consInfo.GetContent(pathOrUrl)
 end
 
 function consInfo.GetReadyLoadText(pathOrUrl)
+	-- Debug: Print exactly what we are trying to process
+    print("[Loader] Preparing to read: " .. tostring(pathOrUrl))
+
+	-- Check if path is valid
+    if pathOrUrl == nil then
+        error("[Loader] CRITICAL: pathOrUrl is nil! Check your config table keys.")
+    end
+	
 	local content = consInfo.GetContent(pathOrUrl)
+
+	if content == nil then
+        warn("Content returned nil, means its gonna use web method!")
+    end
 	
     if offlineModuleLoad then
 		return "loadstring([=[" .. content .. "]=])()"
