@@ -6,7 +6,7 @@ local CONS_INFO_URL = "https://raw.githubusercontent.com/user29031203/LegendZero
 local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
 
 local ServerManager = {
-    RETRY_DELAY = 10
+    RETRY_DELAY = 1
 }
 
 function ServerManager.GetCurrentServerInfo()
