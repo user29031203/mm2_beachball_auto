@@ -13,7 +13,7 @@ local ServerApi = CONS_INFO.Load(CONS_INFO.URLS.SERVER_MANAGER_URL)
 local LeaderboardApi = CONS_INFO.Load(CONS_INFO.URLS.LEADERBOARD_LIB_URL)
 
 -- initialize executor specific required APIs
-local TeleportQueue = loadstring(game:HttpGet(CONS_INFO.URLS.EXECUTOR_API_INIT_URL))()
+local TeleportQueue = CONS_INFO.Load(CONS_INFO.URLS.EXECUTOR_API_INIT_URL)
 if not TeleportQueue then return end --check if it loaded without problems
 
 local function CheckAndHandleMatching()
