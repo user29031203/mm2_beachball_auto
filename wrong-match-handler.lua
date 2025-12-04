@@ -20,7 +20,7 @@ if not TeleportQueue then
 end
 
 local function CheckAndHandleMatching()
-    local leaderstats = LocalPlayer:WaitForChild("leaderstats", generalTimeout)
+    local leaderstats = LocalPlayer:WaitForChild("leaderstats", CONS_INFO.generalTimeout)
     
     if leaderstats then
         print("leaderstats loaded — checking duo status...")
