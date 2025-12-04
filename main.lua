@@ -4,6 +4,10 @@ local LocalPlayer = Players.LocalPlayer
 local PathfindingService = game:GetService("PathfindingService")
 local MyId = LocalPlayer.UserId
 
+
+--DEBUGCONSOLE
+game:GetService("StarterGui"):SetCore("DevConsoleVisible", true)
+
 local CONS_INFO_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/constants.lua" 
 local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
 print(CONS_INFO)
