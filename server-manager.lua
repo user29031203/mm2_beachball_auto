@@ -1,6 +1,5 @@
 local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
 
 local CONS_INFO_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/constants.lua" 
 local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
@@ -88,7 +87,7 @@ function ServerManager.JoinRandomServer(placeId)
     -- Basic retry logic for random server as well
     local function attemptRandom()
         local success, err = pcall(function()
-            TeleportService:Teleport(placeId, LocalPlayer)
+            TeleportService:Teleport(placeId, Players.LocalPlayer)
         end)
         
         if not success then
