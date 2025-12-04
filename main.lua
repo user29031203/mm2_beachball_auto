@@ -13,18 +13,11 @@ local MATCH_HANDLER_SCRIPT = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.WRONG
 local LeaderboardApi = loadstring(game:HttpGet(CONS_INFO.URLS.LEADERBOARD_LIB_URL))()
 local MovementApi = loadstring(game:HttpGet(CONS_INFO.URLS.MOVEMENT_LIB_URL))()
 
--- teleportatin support 
-local TeleportQueue = queue_on_teleport 
-if not TeleportQueue then
-    TeleportQueue = (syn and syn.queue_on_teleport) or (fluxus and fluxus.queue_on_teleport)
-end
-if not TeleportQueue then
-    warn("Executor TeleportQueue function not found. Cannot queue command for next server.")
-    return
-end
+-- initialize executor specific required APIs
+local TeleportQueue = loadstring(game:HttpGet(CONS_INFO.URLS.EXECUTOR_API_INIT_URL))()
+if not TeleportQueue then return end --check if it loaded without problems
 
 -- be sure everything imported without problems
-
 libs = {LeaderboardApi, MovementApi, CONS_INFO}
 for i=0, 4 do
     print(type(libs[i]))
@@ -39,7 +32,6 @@ else
     -- Optional: Stop script
     --return 
 end
-
 
 -- get points of both client
 local hosterShouldLose = LeaderboardApi.ShouldHosterLose(CONS_INFO.hosterName, CONS_INFO.joinerName)
