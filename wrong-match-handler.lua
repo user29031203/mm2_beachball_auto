@@ -41,6 +41,7 @@ local function LobbyRefresh()
 end
 
 local IsDuoMatched, hosterShouldLose = CheckAndHandleMatching()
+hosterShouldLose = "" --DISABLED INSTANT QUEUE PREVENTER FEATURE
 if hosterShouldLose == true and MyId == CONS_INFO.joinerId then
     LobbyRefresh()
 elseif hosterShouldLose == false and MyId == CONS_INFO.hosterId then
