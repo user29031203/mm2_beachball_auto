@@ -17,9 +17,7 @@ function ServerManager.JoinServerById(placeId, jobId)
     local function attemptJoin()
         warn("[ServerManager] Attempting to join Place: " .. tostring(placeId) .. " | Job: " .. tostring(jobId))
         
-        local success, err = pcall(function()
-            TeleportService:TeleportToPlaceInstance(placeId, jobId)
-        end)
+        local success, err = pcall(TeleportService:TeleportToPlaceInstance, placeId, jobId)
 
         if not success then
             warn("[ServerManager] Immediate Teleport Error: " .. tostring(err))
