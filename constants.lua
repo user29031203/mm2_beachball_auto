@@ -35,3 +35,5 @@ end
 for key, fileName in pairs(consInfo.URLS) do
     consInfo.URLS[key] = raw(fileName)
 end
+
+return consInfo
