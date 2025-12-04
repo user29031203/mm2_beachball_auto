@@ -31,7 +31,7 @@ end
 local function SendJobId()
     print("Sending data to dweetr.io...")
     return Comm:Send({
-        Status = "Working",
+        status = "Working",
         JobId = game.JobId,
         Time = 0
     })
@@ -50,13 +50,13 @@ local function ReadJobId()
     return data, createdTime
 end
 
-if MyId == CONS_INFO.hosterId and status == false then       -- ← CHANGE THIS TO ALT1'S USERID
+if MyId == CONS_INFO.hosterId and _G.status == false then       -- ← CHANGE THIS TO ALT1'S USERID
     -- send jobid through dweetr
     print("IM HOST!")
     local success, msg = SendJobId()
 	print("Send Result:", msg) 
 	loadstring(game:HttpGet(CONS_INFO.URLS.MAIN_CODE_URL))()
-elseif MyId == CONS_INFO.joinerId and status == false then
+elseif MyId == CONS_INFO.joinerId and _G.status == false then
     -- receive jobid through dweetr 
     print("IM JOINER!")
 	local MAIN_SCRIPT = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.MAIN_CODE_URL .. "'))()"
@@ -73,6 +73,6 @@ elseif MyId == CONS_INFO.joinerId and status == false then
 	else
 		ServerApi.JoinRandomServer()
 	end
-elseif status == true then 
+elseif _G.status == true then 
 	loadstring(game:HttpGet(CONS_INFO.URLS.MAIN_CODE_URL))()
 end 
