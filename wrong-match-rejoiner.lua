@@ -20,10 +20,11 @@ if not TeleportQueue then return end --check if it loaded without problems
 
 --[[ general timeout to wait for loser to join back 
 	also u can make a loop to call everytime this func and wait for max 5 seconds]]
-local status, timer = false, 0
-while not status and timer < CONS_INFO.generalTimeout do
+local timer = 0
+_G.status = false
+while not _G.status and timer < CONS_INFO.generalTimeout do
 	task.wait(0.5)
-	status = LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName)
+	_G.status = LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName)
 	timer = timer + 0.5
 end
 
