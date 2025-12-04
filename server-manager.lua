@@ -17,98 +17,67 @@ function ServerManager.GetCurrentServerInfo()
     return { PlaceId = game.PlaceId, JobId = game.JobId }
 end
 
-function ServerManager.JoinServerById(placeId, jobId, shouldRepeat, attemptCount)
-    attemptCount = attemptCount or 0
-    local MAX_RETRIES = 3
+function ServerManager.JoinServerById(placeId, jobId, shouldRepeat)
+    -- If repeat is true, try 5 times. If false, try 1 time.
+    local MAX_RETRIES = shouldRepeat and 5 or 1
+    local attemptCount = 0
 
-    -- ==========================================
-    -- MODE 1: REPEAT ENABLED (Recursive Retry)
-    -- ==========================================
-    if shouldRepeat then
-        if attemptCount >= MAX_RETRIES then
-            warn("[ServerManager] FAILED: Max retries reached.")
-            if teleportConnection then teleportConnection:Disconnect() teleportConnection = nil end
-            return false, "Max retries reached"
-        end
+    while attemptCount < MAX_RETRIES do
+        attemptCount = attemptCount + 1
+        warn("[ServerManager] Attempt " .. attemptCount .. "/" .. MAX_RETRIES .. "...")
 
-        -- Setup Listener for Async Failures
-        if teleportConnection then teleportConnection:Disconnect() end
+        -- Variables to track the outcome of THIS attempt
+        local attemptFailed = false
+        local failReason = nil
         
-        teleportConnection = TeleportService.TeleportInitFailed:Connect(function(player, result, errorMessage)
-            if player == Players.LocalPlayer then
-                warn("[ServerManager] Async Teleport Failed: " .. tostring(errorMessage))
-                
-                if teleportConnection then teleportConnection:Disconnect() teleportConnection = nil end
-                
-                warn("[ServerManager] Retrying... (Attempt " .. (attemptCount + 1) .. "/" .. MAX_RETRIES .. ")")
-                task.wait(ServerManager.RETRY_DELAY)
-                
-                -- Recursive retry
-                ServerManager.JoinServerById(placeId, jobId, true, attemptCount + 1)
-            end
-        end)
-
-        warn("[ServerManager] Attempting to join (Attempt " .. attemptCount .. ")...")
-        
-        local success, err = pcall(function()
-            TeleportService:TeleportToPlaceInstance(placeId, jobId, Players.LocalPlayer)
-        end)
-
-        if not success then
-            warn("[ServerManager] Immediate Error: " .. tostring(err))
-            task.wait(ServerManager.RETRY_DELAY)
-            return ServerManager.JoinServerById(placeId, jobId, true, attemptCount + 1)
-        end
-
-        return true -- Request sent (Retries handled in background)
-    
-    -- ==========================================
-    -- MODE 2: REPEAT DISABLED (Return Async Result)
-    -- ==========================================
-    else
-        local asyncResult = nil -- Will become false if event fires, true if timeout passes
-        local asyncError = nil
-
-        -- 1. Setup temporary listener
+        -- 1. Setup Listener for this specific attempt
         local connection
         connection = TeleportService.TeleportInitFailed:Connect(function(player, result, errorMessage)
             if player == Players.LocalPlayer then
-                asyncResult = false
-                asyncError = errorMessage
+                attemptFailed = true
+                failReason = errorMessage
             end
         end)
 
-        -- 2. Attempt Teleport
-        warn("[ServerManager] Attempting to join (Single Try)...")
+        -- 2. Fire Teleport
         local success, err = pcall(function()
             TeleportService:TeleportToPlaceInstance(placeId, jobId, Players.LocalPlayer)
         end)
 
-        -- 3. Handle Immediate pcall Error
+        -- 3. Handle Immediate Script Errors (e.g., Invalid Arguments)
         if not success then
-            connection:Disconnect()
-            warn("[ServerManager] Immediate Fail: " .. tostring(err))
-            return false, err
+            attemptFailed = true
+            failReason = err
         end
 
-        -- 4. Wait for the Async Event (The "Pause")
-        -- We wait until a result is found OR time runs out
-        local timer = 0
-        while asyncResult == nil and timer < ServerManager.TIMEOUT_WAIT do
-            task.wait(0.1)
-            timer = timer + 0.1
+        -- 4. If pcall succeeded, we must WAIT to see if the Engine fails (Async check)
+        if success then
+            local timer = 0
+            -- Wait loop: Stop if we detect failure OR if time runs out
+            while not attemptFailed and timer < ServerManager.TIMEOUT_WAIT do
+                task.wait(0.1)
+                timer = timer + 0.1
+            end
         end
-        
-        connection:Disconnect()
 
-        -- 5. Return Result
-        if asyncResult == false then
-            -- The listener fired! We caught the "GameEnded" error.
-            warn("[ServerManager] Async Fail Caught: " .. tostring(asyncError))
-            return false, asyncError
+        -- 5. Cleanup Connection
+        if connection then connection:Disconnect() end
+
+        -- 6. Decide what to do
+        if attemptFailed then
+            warn("[ServerManager] Attempt " .. attemptCount .. " Failed: " .. tostring(failReason))
+            
+            -- If we have attempts left, wait and loop again
+            if attemptCount < MAX_RETRIES then
+                warn("[ServerManager] Retrying in " .. ServerManager.RETRY_DELAY .. "s...")
+                task.wait(ServerManager.RETRY_DELAY)
+            else
+                -- No attempts left, return Failure
+                return false, "Max retries reached. Last error: " .. tostring(failReason)
+            end
         else
-            -- Timer finished, no error appeared. Teleport probably successful.
-            return true, "Request sent, no immediate/future failure detected."
+            -- If attemptFailed is still false here, we assume Success!
+            return true, "Teleport Initiated"
         end
     end
 end
