@@ -72,16 +72,18 @@ function consInfo.GetContent(pathOrUrl)
     else
         -- ONLINE MODE: Use game:HttpGet()
         -- print("[Online] Fetching:", pathOrUrl)
-        return content
+        return pathOrUrl
     end
 end
 
 
-function consInfo.Load(content)
+function consInfo.ReadyLoadText(pathOrUrl)
+	local content = GetContent(pathOrUrl)
+	
     if offlineModuleLoad then
-		return loadstring(content)()
+		return "loadstring('" .. content .. "')()"
 	else
-		return loadstring(game:HttpGet(pathOrUrl))()
+		return "loadstring(game:HttpGet('" .. content .. "'))()"
 	end
 end
 
