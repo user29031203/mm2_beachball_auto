@@ -13,10 +13,10 @@ local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
 print(CONS_INFO)
 
 -- External Libs 
-local TELEPORT_HANDLER_SCRIPT = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.TELEPORT_HANDLER_URL .. "'))()"
-local MATCH_HANDLER_SCRIPT = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.WRONG_MATCH_HANDLER_URL .. "'))()"
-local LeaderboardApi = loadstring(game:HttpGet(CONS_INFO.URLS.LEADERBOARD_LIB_URL))()
-local MovementApi = loadstring(game:HttpGet(CONS_INFO.URLS.MOVEMENT_LIB_URL))()
+local TELEPORT_HANDLER_SCRIPT = CONS_INFO.GetReadyLoadText(CONS_INFO.URLS.TELEPORT_HANDLER_URL)
+local MATCH_HANDLER_SCRIPT = CONS_INFO.GetReadyLoadText(CONS_INFO.URLS.WRONG_MATCH_HANDLER_URL)
+local LeaderboardApi = CONS_INFO.Load(CONS_INFO.URLS.LEADERBOARD_LIB_URL)
+local MovementApi = CONS_INFO.Load(CONS_INFO.URLS.MOVEMENT_LIB_URL)
 
 -- initialize executor specific required APIs
 local TeleportQueue = loadstring(game:HttpGet(CONS_INFO.URLS.EXECUTOR_API_INIT_URL))()
