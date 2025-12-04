@@ -19,7 +19,7 @@ end
 
 function ServerManager.JoinServerById(placeId, jobId, shouldRepeat, attemptCount)
     attemptCount = attemptCount or 0
-    local MAX_RETRIES = 5
+    local MAX_RETRIES = 2
 
     -- ==========================================
     -- MODE 1: REPEAT ENABLED (Recursive Retry)
