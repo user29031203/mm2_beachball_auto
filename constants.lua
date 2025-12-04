@@ -77,7 +77,7 @@ function consInfo.GetContent(pathOrUrl)
 end
 
 
-function consInfo.ReadyLoadText(pathOrUrl)
+function consInfo.GetReadyLoadText(pathOrUrl)
 	local content = GetContent(pathOrUrl)
 	
     if offlineModuleLoad then
