@@ -17,7 +17,15 @@ local Comm = DweetLib.new(CONS_INFO.mySecretKey)
 local TeleportQueue = loadstring(game:HttpGet(CONS_INFO.URLS.EXECUTOR_API_INIT_URL))()
 if not TeleportQueue then return end --check if it loaded without problems
 
-local status = LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName)
+
+--[[ general timeout to wait for loser to join back 
+	also u can make a loop to call everytime this func and wait for max 5 seconds]]
+local status, timer = false, 0
+while not status and timer < CONS_INFO.generalTimeout do
+	task.wait(0.5)
+	status = LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName)
+	timer = timer + 0.5
+end
 
 local function SendJobId()
     print("Sending data to dweetr.io...")
