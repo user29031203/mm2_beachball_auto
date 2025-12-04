@@ -19,14 +19,14 @@ end
 
 function ServerManager.JoinServerById(placeId, jobId, shouldRepeat, attemptCount)
     attemptCount = attemptCount or 0
-    local MAX_RETRIES = 5
+    local MAX_RETRIES = 3
 
     -- ==========================================
     -- MODE 1: REPEAT ENABLED (Recursive Retry)
     -- ==========================================
     if shouldRepeat then
         if attemptCount >= MAX_RETRIES then
-            warn("[ServerManager] FAILED: Max retries (5) reached.")
+            warn("[ServerManager] FAILED: Max retries reached.")
             if teleportConnection then teleportConnection:Disconnect() teleportConnection = nil end
             return false, "Max retries reached"
         end
