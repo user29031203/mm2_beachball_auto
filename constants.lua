@@ -81,7 +81,7 @@ function consInfo.ReadyLoadText(pathOrUrl)
 	local content = GetContent(pathOrUrl)
 	
     if offlineModuleLoad then
-		return "loadstring('" .. content .. "')()"
+		return "loadstring([=[" .. content .. "]=])()"
 	else
 		return "loadstring(game:HttpGet('" .. content .. "'))()"
 	end
