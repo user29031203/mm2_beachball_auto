@@ -56,7 +56,13 @@ elseif MyId == CONS_INFO.joinerId and status == false then
 	pcall(TeleportQueue, MAIN_SCRIPT)
     local ReadedData, msg = ReadJobId() 
 	if ReadedData then 
-		ServerApi.JoinServerById(CONS_INFO.duelsPlaceId, ReadedData.JobId)
+		local success, result = ServerApi.JoinServerById(CONS_INFO.duelsPlaceId, ReadedData.JobId, true)
+		if success then
+		    print("Success Joiner Worked: " .. result)
+		else
+		    warn("Final/Final!! Failure!!: " .. result)
+			loadstring(game:HttpGet(CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL))()
+		end
 	else
 		ServerManager.JoinRandomServer()
 	end
