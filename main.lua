@@ -66,8 +66,14 @@ end
 
 if type(hosterShouldLose) ~= "string" then
 	if MyId == CONS_INFO.hosterId then
-		MovementApi.SmartWalkTo(MovementApi.HosterPos)
+		local success, err = pcall(function()
+            MovementApi.SmartWalkTo(MovementApi.HosterPos)
+        end)
+		if not success then print("FAILED MOVEMENT:" .. err) end
 	elseif MyId == CONS_INFO.joinerId then
-		MovementApi.SmartWalkTo(MovementApi.JoinerPos)
+		local success, err = pcall(function()
+            MovementApi.SmartWalkTo(MovementApi.JoinerPos)
+        end)
+		if not success then print("FAILED MOVEMENT:" .. err) end
 	end
 end
