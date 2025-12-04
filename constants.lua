@@ -2,14 +2,6 @@ local OWNER = "user29031203"
 local REPO  = "LegendZero"      
 local BRANCH = "main"         
 
--- get latest commit sha
-local BASE_RAW_URL
-do
-    local api = ("https://api.github.com/repos/%s/%s/commits/%s"):format(OWNER, REPO, BRANCH)
-    local sha = game:HttpGet(api, true):match('"sha":"([a-f0-9]+)"') or BRANCH
-    BASE_RAW_URL = ("https://raw.githubusercontent.com/%s/%s/%s/"):format(OWNER, REPO, sha)
-end
-
 local consInfo = {
     hosterName = "X0010010",
     joinerName = "306a2e5cd_2",
@@ -36,10 +28,7 @@ local consInfo = {
 
 -- learn url which links to latest sha commit result of the script
 local function raw(file)
-    local sha = game:HttpGet(("https://api.github.com/repos/%s/%s/commits/%s"):format(OWNER, REPO, BRANCH), true)
-                :match('"sha":"([a-f0-9]+)"') or BRANCH
-    
-    return ("https://raw.githubusercontent.com/%s/%s/%s/%s"):format(OWNER, REPO, sha, file:gsub("^/*", ""))
+    return ("https://raw.githubusercontent.com/%s/%s/%s/%s"):format(OWNER, REPO, BRANCH, file:gsub("^/*", ""))
 end
 
 -- hot reload
