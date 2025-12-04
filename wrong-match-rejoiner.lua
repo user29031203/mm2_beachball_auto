@@ -18,7 +18,7 @@ local DweetLib = CONS_INFO.Load(CONS_INFO.URLS.DWEETR_LIB_URL)
 local Comm = DweetLib.new(CONS_INFO.mySecretKey)
 
 -- initialize executor specific required APIs
-local TeleportQueue = loadstring(game:HttpGet(CONS_INFO.URLS.EXECUTOR_API_INIT_URL))()
+local TeleportQueue = CONS_INFO.Load(CONS_INFO.URLS.EXECUTOR_API_INIT_URL)
 if not TeleportQueue then return end --check if it loaded without problems
 
 
