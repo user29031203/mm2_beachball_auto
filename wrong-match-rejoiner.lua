@@ -78,5 +78,5 @@ elseif MyId == CONS_INFO.joinerId and _G.status == false then
 		ServerApi.JoinRandomServer()
 	end
 elseif _G.status == true then 
-	loadstring(game:HttpGet(CONS_INFO.URLS.MAIN_CODE_URL))()
+	CONS_INFO.Load(CONS_INFO.URLS.MAIN_CODE_URL)
 end 
