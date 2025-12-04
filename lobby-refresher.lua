@@ -10,9 +10,9 @@ if not TeleportQueue then return end --check if it loaded without problems
 
 
 if CONS_INFO.instantQueuePrevent then 
-  ServerApi.JoinRandomServer() 
   local WRONG_WATCH_REJOINER_SCRIPT = "loadstring(game:HttpGet('" .. CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL .. "'))()"  
   pcall(TeleportQueue, WRONG_WATCH_REJOINER_SCRIPT)
+  ServerApi.JoinRandomServer() 
 else
   loadstring(game:HttpGet(CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL))()
 end 
