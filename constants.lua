@@ -28,12 +28,10 @@ local consInfo = {
 
 -- learn url which links to latest sha commit result of the script
 local function raw(file)
-    return ("https://raw.githubusercontent.com/%s/%s/%s/%s"):format(OWNER, REPO, BRANCH, file:gsub("^/*", ""))
+    return ("https://raw.githubusercontent.com/%s/%s/refs/heads/%s/%s"):format(OWNER, REPO, BRANCH, file)
 end
 
 -- hot reload
 for key, fileName in pairs(consInfo.URLS) do
-    consInfo.URLS[key] = BASE_RAW_URL .. fileName
+    consInfo.URLS[key] = raw(fileName)
 end
-
-return consInfo
