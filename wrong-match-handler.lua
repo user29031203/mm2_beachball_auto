@@ -25,7 +25,7 @@ local function CheckAndHandleMatching()
         return hosterShouldLose
     else
         warn("leaderstats NEVER loaded → Hopping anyway (safe fallback)")
-        task.wait(0.1)
+        task.wait(10)
         ServerApi.JoinRandomServer()
     end
 end
@@ -49,7 +49,6 @@ elseif IsDuoMatched == false then --direct leave and rejoin
     local WRONG_WATCH_REJOINER_SCRIPT = CONS_INFO.GetReadyLoadText(CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL)
     pcall(TeleportQueue, WRONG_WATCH_REJOINER_SCRIPT)
     print("DEBUG SO IMPORTANT")
-    task.wait(2)
     ServerApi.JoinRandomServer()
 end
 

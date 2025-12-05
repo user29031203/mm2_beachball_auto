@@ -23,7 +23,8 @@ if not TeleportQueue then return end --check if it loaded without problems
 
 
 --[[ general timeout to wait for loser to join back 
-	also u can make a loop to call everytime this func and wait for max 5 seconds]]
+	also u can make a loop to call everytime this func and wait for max 5 seconds
+	UPDATE: THIS SHOULD BE A FUNC!]]
 local timer = 0
 _G.status = false
 while not _G.status and timer < CONS_INFO.generalTimeout do
