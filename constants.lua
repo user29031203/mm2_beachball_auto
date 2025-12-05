@@ -55,6 +55,8 @@ end
 ---------------------------------------------------------------------
 
 function consInfo.GetContent(pathOrUrl)
+	print("[Loader] Preparing to read: " .. tostring(pathOrUrl))
+	
     if not pathOrUrl then 
         return warn("Module Key not found:", key) 
     end
