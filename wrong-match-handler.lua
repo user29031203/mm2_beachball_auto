@@ -22,10 +22,9 @@ local function CheckAndHandleMatching()
     if leaderstats then
         print("leaderstats loaded — checking duo status...")
         _G.hosterShouldLose = _G.hosterShouldLose or LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName)
-        return hosterShouldLose
+        return _G.hosterShouldLose
     else
         warn("leaderstats NEVER loaded → Hopping anyway (safe fallback)")
-        task.wait(10)
         ServerApi.JoinRandomServer()
     end
 end
