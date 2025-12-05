@@ -26,10 +26,13 @@ if not TeleportQueue then return end --check if it loaded without problems
 	also u can make a loop to call everytime this func and wait for max 5 seconds
 	UPDATE: THIS SHOULD BE A FUNC!]]
 local timer = 0
+
 _G.status = false
+local hosterShouldLose
 while not _G.status and timer < CONS_INFO.generalTimeout do
 	task.wait(0.5)
-	_G.status = LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName)
+	hosterShouldLose = LeaderboardApi.ShouldHosterLose(CONS_INFO.hosterName, CONS_INFO.joinerName)
+	_G.status = LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName, hosterShouldLose)
 	timer = timer + 0.5
 end
 
@@ -55,6 +58,7 @@ local function ReadJobId()
     return data, createdTime
 end
 
+
 if MyId == CONS_INFO.hosterId and _G.status == false then       -- ← CHANGE THIS TO ALT1'S USERID
     -- send jobid through dweetr
     print("IM HOST!")
@@ -79,5 +83,8 @@ elseif MyId == CONS_INFO.joinerId and _G.status == false then
 		ServerApi.JoinRandomServer()
 	end
 elseif _G.status == true then 
+	-- find a way to detect winner and only run main code for loser
+	-- also winner should pcall teleporthandler or wrongmatchhandler according to hosterShouldLose
+	-- basically faster and extra join requirement removed! 
 	CONS_INFO.Load(CONS_INFO.URLS.MAIN_CODE_URL)
 end 

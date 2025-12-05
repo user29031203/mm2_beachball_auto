@@ -45,41 +45,80 @@ local hosterShouldLose = LeaderboardApi.ShouldHosterLose(CONS_INFO.hosterName, C
 print("DATA ABOUT HOSTER !!!!" , hosterShouldLose)
 
 -- match checking and teleportation trigger
-if type(hosterShouldLose) == "string" then
-	print("CODE BLOCK 1")
-	warn("NO DUO FOUND RUNNING REJOIN HANDLER/LOBBY REFRESHER")
-    task.wait(0.2)
-    CONS_INFO.Load(CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL)
-elseif MyId == CONS_INFO.hosterId and hosterShouldLose == true then        -- ← CHANGE THIS TO ALT1'S USERID
-    print("CODE BLOCK 2")
-	print("IM A2 -- HOST")
-    pcall(TeleportQueue, TELEPORT_HANDLER_SCRIPT) 
-elseif MyId == CONS_INFO.joinerId and hosterShouldLose == false then    -- ← CHANGE THIS TO ALT2'S USERID 
-    print("CODE BLOCK 3")
-	print("IM CD -- JOINER")
-    pcall(TeleportQueue, TELEPORT_HANDLER_SCRIPT) 
-else
-    print("Unknown alt - check UserIds")
-end 
+local function main_logic()
+    if type(hosterShouldLose) == "string" then
+        print("CODE BLOCK 1")
+        warn("NO DUO FOUND RUNNING REJOIN HANDLER/LOBBY REFRESHER")
+        task.wait(0.2)
+        CONS_INFO.Load(CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL)
+    elseif MyId == CONS_INFO.hosterId and hosterShouldLose == true then        -- ← CHANGE THIS TO ALT1'S USERID
+        print("CODE BLOCK 2")
+        print("IM A2 -- HOST")
+        pcall(TeleportQueue, TELEPORT_HANDLER_SCRIPT) 
+    elseif MyId == CONS_INFO.joinerId and hosterShouldLose == false then    -- ← CHANGE THIS TO ALT2'S USERID 
+        print("CODE BLOCK 3")
+        print("IM CD -- JOINER")
+        pcall(TeleportQueue, TELEPORT_HANDLER_SCRIPT) 
+    else
+        print("Unknown alt - check UserIds")
+    end 
 
-if MyId == CONS_INFO.joinerId and hosterShouldLose == true then
-	pcall(TeleportQueue, MATCH_HANDLER_SCRIPT)
-	print("JOINER MATCHHANDLING ACTIVATED!")
-elseif MyId == CONS_INFO.hosterId and hosterShouldLose == false then
-    pcall(TeleportQueue, MATCH_HANDLER_SCRIPT)
-	print("HOSTER MATCHHANDLING ACTIVATED!")
+    if MyId == CONS_INFO.joinerId and hosterShouldLose == true then
+        pcall(TeleportQueue, MATCH_HANDLER_SCRIPT)
+        print("JOINER MATCHHANDLING ACTIVATED!")
+    elseif MyId == CONS_INFO.hosterId and hosterShouldLose == false then
+        pcall(TeleportQueue, MATCH_HANDLER_SCRIPT)
+        print("HOSTER MATCHHANDLING ACTIVATED!")
+    end
+end
+
+-- fix repeating code later!
+local function main_logic_instant()
+    if type(hosterShouldLose) == "string" then
+        print("CODE BLOCK 1")
+        warn("NO DUO FOUND RUNNING REJOIN HANDLER/LOBBY REFRESHER")
+        task.wait(0.2)
+        CONS_INFO.Load(CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL)
+    elseif MyId == CONS_INFO.hosterId and hosterShouldLose == true then        -- ← CHANGE THIS TO ALT1'S USERID
+        print("CODE BLOCK 2")
+        print("IM A2 -- HOST")
+        CONS_INFO.Load(CONS_INFO.URLS.TELEPORT_HANDLER_SCRIPT)
+    elseif MyId == CONS_INFO.joinerId and hosterShouldLose == false then    -- ← CHANGE THIS TO ALT2'S USERID 
+        print("CODE BLOCK 3")
+        print("IM CD -- JOINER")
+        CONS_INFO.Load(CONS_INFO.URLS.TELEPORT_HANDLER_SCRIPT)
+    else
+        print("Unknown alt - check UserIds")
+    end 
+
+    if MyId == CONS_INFO.joinerId and hosterShouldLose == true then
+        CONS_INFO.Load(CONS_INFO.URLS.MATCH_HANDLER_SCRIPT)
+        print("JOINER MATCHHANDLING ACTIVATED!")
+    elseif MyId == CONS_INFO.hosterId and hosterShouldLose == false then
+        CONS_INFO.Load(CONS_INFO.URLS.MATCH_HANDLER_SCRIPT)
+        print("HOSTER MATCHHANDLING ACTIVATED!")
+    end
+end
+
+
+main_logic()
+
+local function move_logic(pos)
+    local success, err = pcall(function()
+        MovementApi.SmartWalkTo(pos)
+    end)
+    if not success then 
+        print("FAILED MOVEMENT:" .. err)
+        main_logic_instant() 
+    end
 end
 
 if type(hosterShouldLose) ~= "string" then
-	if MyId == CONS_INFO.hosterId then
-		local success, err = pcall(function()
-            MovementApi.SmartWalkTo(MovementApi.HosterPos)
-        end)
-		if not success then print("FAILED MOVEMENT:" .. err) end
+	-- if pathfinding fails, it stands for main.lua loaded so slow and alts matched so fast
+    if MyId == CONS_INFO.hosterId then
+		move_logic(MovementApi.HosterPos)
 	elseif MyId == CONS_INFO.joinerId then
-		local success, err = pcall(function()
-            MovementApi.SmartWalkTo(MovementApi.JoinerPos)
-        end)
-		if not success then print("FAILED MOVEMENT:" .. err) end
+		move_logic(MovementApi.JoinerPos)
 	end
-end 
+end
+

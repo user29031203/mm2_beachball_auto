@@ -95,7 +95,8 @@ function Movement.SmartWalkTo(targetPosition)
         end
         print("\nPATH COMPLETE")
     else
-        warn("Pathfinding failed!")
+        warn("PATHFINDING FAILED!")
+        error("Pathfinding failed! Rerun MAIN LOGIC PROB FAST JOIN OCCURED!!")
     end
 end
 

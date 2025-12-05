@@ -68,8 +68,7 @@ local function characterChecker()
 end 
 
 print("CALLING WRONG MATCH HANDLER!")
---local WrongMatchHandler = CONS_INFO.Load(CONS_INFO.URLS.WRONG_MATCH_HANDLER_URL)
-local WrongMatchHandler = true
+local WrongMatchHandler = CONS_INFO.Load(CONS_INFO.URLS.WRONG_MATCH_HANDLER_URL)
 if WrongMatchHandler == true then
     print("GONNA RESET!")
     reset()
