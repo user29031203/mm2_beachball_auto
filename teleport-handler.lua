@@ -69,5 +69,7 @@ local WrongMatchHandler = CONS_INFO.Load(CONS_INFO.URLS.WRONG_MATCH_HANDLER_URL)
 if WrongMatchHandler == true then
     reset()
     characterChecker()
+else then
+    print("WHY DIDNT WORK?", WrongMatchHandler)
 end
 

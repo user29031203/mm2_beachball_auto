@@ -13,5 +13,6 @@ if CONS_INFO.instantQueuePrevent then
   pcall(TeleportQueue, WRONG_WATCH_REJOINER_SCRIPT)
   ServerApi.JoinRandomServer() 
 else
+  print("RUNNING MATCH REJOINER")
   CONS_INFO.Load(CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL)
 end 
