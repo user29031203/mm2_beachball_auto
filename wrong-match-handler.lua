@@ -9,8 +9,6 @@ local MyId = LocalPlayer.UserId
 local CONS_INFO_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/constants.lua" 
 local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
 
-
-print("I CANT LOAD!!?")
 local ServerApi = CONS_INFO.Load(CONS_INFO.URLS.SERVER_MANAGER_URL)
 local LeaderboardApi = CONS_INFO.Load(CONS_INFO.URLS.LEADERBOARD_LIB_URL)
 
@@ -41,7 +39,7 @@ end
 local hosterShouldLose = CheckAndHandleMatching()
 local IsDuoMatched = LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName, hosterShouldLose)
 
-print("DEBUG;", hosterShouldLose, IsDuoMatched, type(IsDuoMatched))
+print("DEBUG;", hosterShouldLose, IsDuoMatched)
 
 if hosterShouldLose == true and MyId == CONS_INFO.joinerId then
     LobbyRefresh()
@@ -51,6 +49,7 @@ elseif IsDuoMatched == false then --direct leave and rejoin
     local WRONG_WATCH_REJOINER_SCRIPT = CONS_INFO.GetReadyLoadText(CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL)
     pcall(TeleportQueue, WRONG_WATCH_REJOINER_SCRIPT)
     print("DEBUG SO IMPORTANT")
+    task.wait(2)
     ServerApi.JoinRandomServer()
 end
 

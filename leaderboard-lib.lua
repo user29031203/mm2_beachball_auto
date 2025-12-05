@@ -70,10 +70,7 @@ end -- <--- This 'end' was missing in your code
 
 function Leaderboard.IsDuoMatched(hosterName, joinerName, ShouldHosterLose)
     ShouldHosterLose = ShouldHosterLose or Leaderboard.ShouldHosterLose(hosterName, joinerName)
-    if ShouldHosterLose == nil then
-        warn("SHOULDHOSTERLOSE IS NIL")
-    end    
-    return ShouldHosterLose ~= Leaderboard.NotMatched
+    return if ShouldHosterLose == Leaderboard.NotMatched then false else true
 end
     
 return Leaderboard
