@@ -71,7 +71,7 @@ function consInfo.GetContent(pathOrUrl)
         print("[Local Dev] Loading:", pathOrUrl)
         local content = readfile(pathOrUrl) -- Executor API
         return content
-    elsew
+    else
         -- ONLINE MODE: Use game:HttpGet()
         -- print("[Online] Fetching:", pathOrUrl)
         return content
