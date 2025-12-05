@@ -15,7 +15,9 @@ local ServerApi = CONS_INFO.Load(CONS_INFO.URLS.SERVER_MANAGER_URL)
 
 -- initialize executor specific required APIs
 local TeleportQueue = CONS_INFO.Load(CONS_INFO.URLS.EXECUTOR_API_INIT_URL)
+print("INIT!")
 if not TeleportQueue then return end --check if it loaded without problems
+print("INIT! DONE!")
 
 -- CLEAR OLD LISTENERS FIRST
 for _, connection in pairs(getconnections(game.Players.LocalPlayer.CharacterAdded)) do
@@ -65,8 +67,10 @@ local function characterChecker()
     end)
 end 
 
+print("CALLING WRONG MATCH HANDLER!")
 local WrongMatchHandler = CONS_INFO.Load(CONS_INFO.URLS.WRONG_MATCH_HANDLER_URL)
 if WrongMatchHandler == true then
+    print("GONNA RESET!")
     reset()
     characterChecker()
 else then
