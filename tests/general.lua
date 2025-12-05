@@ -1,6 +1,7 @@
 local constantsFile = "LegendZero/constants.lua"
 local offlineModuleLoad = true
 
+
 function GetContent(pathOrUrl)
 	print("[Loader] Preparing to read: " .. tostring(pathOrUrl))
 	
@@ -64,15 +65,21 @@ local onlineContentSource = "https://raw.githubusercontent.com/user29031203/Lege
 --local onlineContent = loadstring(game:HttpGet(onlineContentSource))
 
 local CONS_INFO = Load(constantsFile)
+
+-- initialize executor specific required APIs
+local TeleportQueue = CONS_INFO.Load(CONS_INFO.URLS.EXECUTOR_API_INIT_URL)
+if not TeleportQueue then return end --check if it loaded without problems
+
+
 print("File", CONS_INFO.URLS.LEADERBOARD_LIB_URL)
 
+local testFile = "LegendZero/tests/teleport-tester.lua"
+local TeleportTesterScript =  CONS_INFO.GetReadyLoadText(testFile)
+print("Content of teleportester", TeleportTesterScript)
 
-local leaderboardcontent = CONS_INFO.GetContent(CONS_INFO.URLS.LEADERBOARD_LIB_URL)
---game:HttpGet("https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/leaderboard-lib.lua")
---CONS_INFO.GetContent(CONS_INFO.URLS.LEADERBOARD_LIB_URL)
+pcall(TeleportQueue, TeleportTesterScript) 
 
-local leaderboardapi = loadstring(leaderboardcontent)()
-print("Result of leaderboard loading is", leaderboardapi)
+print("OK")
 
 
 -- CHECKED THINGS IS LEADERBOARD AND CONSTANTS ONLY!
