@@ -86,5 +86,9 @@ elseif _G.status == true then
 	-- find a way to detect winner and only run main code for loser
 	-- also winner should pcall teleporthandler or wrongmatchhandler according to hosterShouldLose
 	-- basically faster and extra join requirement removed! 
-	CONS_INFO.Load(CONS_INFO.URLS.MAIN_CODE_URL)
+	if _G.oldLoserId and _G.oldLoserId == MyId then
+		CONS_INFO.Load(CONS_INFO.URLS.MAIN_CODE_URL)
+	elseif not _G.oldLoserId then
+		warn("_G.oldLoserId returned nil")
+	end
 end 

@@ -32,6 +32,8 @@ end
 -- lobby refresh to prevent qeueuing with someone else after win
 local function LobbyRefresh()
     local LOBBY_REFRESHER_SCRIPT = CONS_INFO.GetReadyLoadText(CONS_INFO.URLS.LOBBY_REFRESHER_URL)
+    local oldLoserSenderScript = "_G.oldLoserId = " .. MyId
+    pcall(TeleportQueue, oldLoserSenderScript)
     pcall(TeleportQueue, LOBBY_REFRESHER_SCRIPT)
 end
 
