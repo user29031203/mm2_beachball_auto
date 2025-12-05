@@ -104,9 +104,9 @@ function consInfo.Load(pathOrUrl)
 	end
 		
 	if offlineModuleLoad then
-		return loadstring(content)
+		return loadstring(content)()
 	else
-		return loadstring(game:HttpGet(pathOrUrl))
+		return loadstring(game:HttpGet(pathOrUrl))()
 	end
 end
 
