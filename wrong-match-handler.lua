@@ -37,6 +37,7 @@ local function LobbyRefresh()
 end
 
 local hosterShouldLose = CheckAndHandleMatching()
+print(hosterShouldLose)
 if hosterShouldLose == true and MyId == CONS_INFO.joinerId then
     LobbyRefresh()
 elseif hosterShouldLose == false and MyId == CONS_INFO.hosterId then
@@ -44,6 +45,8 @@ elseif hosterShouldLose == false and MyId == CONS_INFO.hosterId then
 else --direct leave and rejoin
     local WRONG_WATCH_REJOINER_SCRIPT = CONS_INFO.GetReadyLoadText(CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL)
     pcall(TeleportQueue, WRONG_WATCH_REJOINER_SCRIPT)
+    print("DEBUG SO IMPORTANT")
+    task.wait(2)
     ServerApi.JoinRandomServer()
 end
 
