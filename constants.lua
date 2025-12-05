@@ -79,9 +79,6 @@ function consInfo.GetContent(pathOrUrl)
 end
 
 function consInfo.GetReadyLoadText(pathOrUrl)
-	-- Debug: Print exactly what we are trying to process
-    print("[Loader] Preparing to read: " .. tostring(pathOrUrl))
-
 	-- Check if path is valid
     if pathOrUrl == nil then
         error("[Loader] CRITICAL: pathOrUrl is nil! Check your config table keys.")
