@@ -21,7 +21,7 @@ local function CheckAndHandleMatching()
     
     if leaderstats then
         print("leaderstats loaded — checking duo status...")
-        local hosterShouldLose = LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName)
+        local _G.hosterShouldLose = _G.hosterShouldLose or LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName)
         return hosterShouldLose
     else
         warn("leaderstats NEVER loaded → Hopping anyway (safe fallback)")
@@ -41,7 +41,7 @@ if hosterShouldLose == true and MyId == CONS_INFO.joinerId then
     LobbyRefresh()
 elseif hosterShouldLose == false and MyId == CONS_INFO.hosterId then
     LobbyRefresh()
-else
+else --direct leave and rejoin
     local WRONG_WATCH_REJOINER_SCRIPT = CONS_INFO.GetReadyLoadText(CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL)
     pcall(TeleportQueue, WRONG_WATCH_REJOINER_SCRIPT)
 end
