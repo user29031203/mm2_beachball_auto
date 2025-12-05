@@ -21,16 +21,8 @@ local function CheckAndHandleMatching()
     
     if leaderstats then
         print("leaderstats loaded — checking duo status...")
-        local status = LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName)
-        -- true was status, it changed to true for testing purposes only
-        if status then
-            local hosterShouldLose = LeaderboardApi.ShouldHosterLose(CONS_INFO.hosterName, CONS_INFO.joinerName)
-            -- debugging/testing purposes if its false/true
-            return true, hosterShouldLose 
-        else 
-            print("Matched with a random!")
-            ServerApi.JoinRandomServer()
-        end
+        local hosterShouldLose = LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName)
+        return hosterShouldLose
     else
         warn("leaderstats NEVER loaded → Hopping anyway (safe fallback)")
         task.wait(0.1)
@@ -44,7 +36,7 @@ local function LobbyRefresh()
     pcall(TeleportQueue, LOBBY_REFRESHER_SCRIPT)
 end
 
-local IsDuoMatched, hosterShouldLose = CheckAndHandleMatching()
+local hosterShouldLose = CheckAndHandleMatching()
 if hosterShouldLose == true and MyId == CONS_INFO.joinerId then
     LobbyRefresh()
 elseif hosterShouldLose == false and MyId == CONS_INFO.hosterId then
