@@ -4,9 +4,6 @@ local Players = game:GetService("Players")
 local CONS_INFO_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/constants.lua" 
 local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
 
--- Keep track of connections to clean them up if needed
-local teleportConnection
-
 local ServerManager = {
     RETRY_DELAY = 3, -- Seconds between retries
     TIMEOUT_WAIT = 4 -- How long to wait for a failure signal before assuming success

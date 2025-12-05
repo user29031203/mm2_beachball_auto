@@ -8,11 +8,10 @@ local ServerApi = CONS_INFO.Load(CONS_INFO.URLS.SERVER_MANAGER_URL)
 local TeleportQueue = CONS_INFO.Load(CONS_INFO.URLS.EXECUTOR_API_INIT_URL)
 if not TeleportQueue then return end --check if it loaded without problems
 
-
 if CONS_INFO.instantQueuePrevent then 
-  local WRONG_WATCH_REJOINER_SCRIPT = CONS_INFO.GetReadyLoadText(CONS_INFO.URLS.WRONG_WATCH_REJOINER_SCRIPT) 
+  local WRONG_WATCH_REJOINER_SCRIPT = CONS_INFO.GetReadyLoadText(CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL) 
   pcall(TeleportQueue, WRONG_WATCH_REJOINER_SCRIPT)
   ServerApi.JoinRandomServer() 
 else
-  CONS_INFO.Load(CONS_INFO.URLS.WRONG_WATCH_REJOINER_SCRIPT)
+  CONS_INFO.Load(CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL)
 end 
