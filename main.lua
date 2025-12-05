@@ -38,6 +38,8 @@ else
     --return 
 end
 
+
+
 -- get points of both client
 local hosterShouldLose = LeaderboardApi.ShouldHosterLose(CONS_INFO.hosterName, CONS_INFO.joinerName)
 print("DATA ABOUT HOSTER !!!!" , hosterShouldLose)
@@ -80,4 +82,4 @@ if type(hosterShouldLose) ~= "string" then
         end)
 		if not success then print("FAILED MOVEMENT:" .. err) end
 	end
-end
+end 

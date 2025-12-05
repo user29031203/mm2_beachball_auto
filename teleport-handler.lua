@@ -58,22 +58,23 @@ local function characterChecker()
             print("RESPAWNED — FULLY LOADED & ALIVE (HP:", hum.Health, ")")
             -- do the method
             ServerApi.JoinRandomServer()
-            --Connect:Disconnect()
+            Connect:Disconnect()
         else
             ServerApi.JoinRandomServer()
             warn("Respawn failed or character missing parts")
-            --Connect:Disconnect()
+            Connect:Disconnect()
         end
     end)
 end 
 
 print("CALLING WRONG MATCH HANDLER!")
-local WrongMatchHandler = CONS_INFO.Load(CONS_INFO.URLS.WRONG_MATCH_HANDLER_URL)
+--local WrongMatchHandler = CONS_INFO.Load(CONS_INFO.URLS.WRONG_MATCH_HANDLER_URL)
+local WrongMatchHandler = true
 if WrongMatchHandler == true then
     print("GONNA RESET!")
     reset()
     characterChecker()
-else then
+else 
     print("WHY DIDNT WORK?", WrongMatchHandler)
 end
 
