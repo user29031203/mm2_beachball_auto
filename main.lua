@@ -15,7 +15,6 @@ print(CONS_INFO)
 -- External Libs 
 local TELEPORT_HANDLER_SCRIPT = CONS_INFO.GetReadyLoadText(CONS_INFO.URLS.TELEPORT_HANDLER_URL)
 local MATCH_HANDLER_SCRIPT = CONS_INFO.GetReadyLoadText(CONS_INFO.URLS.WRONG_MATCH_HANDLER_URL)
-local MainLogicApi = CONS_INFO.Load(CONS_INFO.URLS.MAIN_LOGIC_URL)
 local MovementApi = CONS_INFO.Load(CONS_INFO.URLS.MOVEMENT_LIB_URL)
 
 -- initialize executor specific required APIs
@@ -39,7 +38,8 @@ else
 end
 
 -- main logic run
-MainLogicApi.MainLogic()
+CONS_INFO.Load(CONS_INFO.URLS.MAIN_LOGIC_URL)
+
 
 local function move_logic(pos)
     local success, err = pcall(function()
