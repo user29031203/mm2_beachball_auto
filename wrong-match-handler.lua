@@ -46,4 +46,4 @@ else
     pcall(TeleportQueue, WRONG_WATCH_REJOINER_SCRIPT)
 end
 
-return IsDuoMatched
+return hosterShouldLose
