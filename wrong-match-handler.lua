@@ -37,12 +37,15 @@ local function LobbyRefresh()
 end
 
 local hosterShouldLose = CheckAndHandleMatching()
-print(hosterShouldLose)
+local IsDuoMatched = LeaderboardApi.IsDuoMatched(CONS_INFO.hosterName, CONS_INFO.joinerName, hosterShouldLose)
+
+print("DEBUG;", hosterShouldLose, IsDuoMatched)
+
 if hosterShouldLose == true and MyId == CONS_INFO.joinerId then
     LobbyRefresh()
 elseif hosterShouldLose == false and MyId == CONS_INFO.hosterId then
     LobbyRefresh()
-else --direct leave and rejoin
+elseif IsDuoMathced == false then --direct leave and rejoin
     local WRONG_WATCH_REJOINER_SCRIPT = CONS_INFO.GetReadyLoadText(CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL)
     pcall(TeleportQueue, WRONG_WATCH_REJOINER_SCRIPT)
     print("DEBUG SO IMPORTANT")
@@ -50,4 +53,4 @@ else --direct leave and rejoin
     ServerApi.JoinRandomServer()
 end
 
-return hosterShouldLose
+return IsDuoMatched
