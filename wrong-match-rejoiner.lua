@@ -90,5 +90,8 @@ elseif _G.status == true then
 		CONS_INFO.Load(CONS_INFO.URLS.MAIN_CODE_URL)
 	elseif not _G.oldLoserId then
 		warn("_G.oldLoserId returned nil")
+		-- just logic code
+		local MainLogicApi = CONS_INFO.Load(CONS_INFO.URLS.MAIN_LOGIC_URL)
+		MainLogicApi.MainLogic()
 	end
 end 

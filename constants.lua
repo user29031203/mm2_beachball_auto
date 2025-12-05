@@ -25,7 +25,8 @@ local consInfo = {
         WRONG_MATCH_REJOINER_URL = "wrong-match-rejoiner.lua",
         LOBBY_REFRESHER_URL      = "lobby-refresher.lua",
         MAIN_CODE_URL            = "main.lua",
-        EXECUTOR_API_INIT_URL    = "executor-specific-initialization.lua"
+        EXECUTOR_API_INIT_URL    = "executor-specific-initialization.lua",
+        MAIN_LOGIC_URL           = "point-logic.lua"
     }
 } 
 
