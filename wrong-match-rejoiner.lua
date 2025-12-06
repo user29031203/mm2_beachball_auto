@@ -23,7 +23,7 @@ if not TeleportQueue then return end --check if it loaded without problems
 
 
 -- CODE EXEC DELAY TIMEOUT
-local execTimeout = 5
+local execTimeout = 6
 
 
 --[[ general timeout to wait for loser to join back 
@@ -63,8 +63,10 @@ local function ReadJobId()
 end
 
 
-if MyId == CONS_INFO.hosterId and _G.status == false then       -- ← CHANGE THIS TO ALT1'S USERID
-    -- send jobid through dweetr
+
+--if MyId == CONS_INFO.hosterId and _G.status == false then       -
+if MyId == CONS_INFO.hosterId then -- refresh jobid everytime
+	-- send jobid through dweetr
     print("IM HOST!")
     local success, msg = SendJobId()
 	print("Send Result:", msg) 
