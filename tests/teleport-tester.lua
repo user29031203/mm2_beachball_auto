@@ -1,1 +1,0 @@
-print("TELEPORTED TO NEW PLACE!")
