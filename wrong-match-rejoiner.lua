@@ -22,6 +22,10 @@ local TeleportQueue = CONS_INFO.Load(CONS_INFO.URLS.EXECUTOR_API_INIT_URL)
 if not TeleportQueue then return end --check if it loaded without problems
 
 
+-- CODE EXEC DELAY TIMEOUT
+local execTimeout = 5
+
+
 --[[ general timeout to wait for loser to join back 
 	also u can make a loop to call everytime this func and wait for max 5 seconds
 	UPDATE: THIS SHOULD BE A FUNC!]]
@@ -69,17 +73,21 @@ elseif MyId == CONS_INFO.joinerId and _G.status == false then
     -- receive jobid through dweetr 
     print("IM JOINER!")
 	local MAIN_SCRIPT = CONS_INFO.GetReadyLoadText(CONS_INFO.URLS.MAIN_CODE_URL)
-	pcall(TeleportQueue, MAIN_SCRIPT)
     local ReadedData, msg = ReadJobId() 
 	if ReadedData then 
+		pcall(TeleportQueue, MAIN_SCRIPT)
+		task.wait(execTimeout) --delay let him load the code
 		local success, result = ServerApi.JoinServerById(CONS_INFO.duelsPlaceId, ReadedData.JobId, true)
 		if success then
 		    print("Success Joiner Worked: " .. result)
 		else
 		    warn("Final/Final!! Failure!!: " .. result)
+			pcall("_G.oldLoserId = " .. MyId)
 			CONS_INFO.Load(CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL)
 		end
 	else
+		pcall(TeleportQueue, MAIN_SCRIPT)
+		task.wait(execTimeout) --delay let him load the code
 		ServerApi.JoinRandomServer()
 	end
 elseif _G.status == true then 
@@ -87,6 +95,7 @@ elseif _G.status == true then
 	-- also winner should pcall teleporthandler or wrongmatchhandler according to hosterShouldLose
 	-- basically faster and extra join requirement removed! 
 	if _G.oldLoserId and _G.oldLoserId == MyId then
+		task.wait(execTimeout) --delay let him load the code
 		CONS_INFO.Load(CONS_INFO.URLS.MAIN_CODE_URL)
 	elseif not _G.oldLoserId then
 		warn("_G.oldLoserId returned nil")

@@ -16,5 +16,6 @@ if false  then
 else
   print("RUNNING MATCH REJOINER")
   pcall(TeleportQueue, "return")
+  -- later add a code to check mainlogic loaded or not and backend too
   CONS_INFO.Load(CONS_INFO.URLS.WRONG_MATCH_REJOINER_URL)
 end 

@@ -1,7 +1,6 @@
 local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
-local PathfindingService = game:GetService("PathfindingService")
 local MyId = LocalPlayer.UserId
 
 
@@ -13,8 +12,6 @@ local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
 print(CONS_INFO)
 
 -- External Libs 
-local TELEPORT_HANDLER_SCRIPT = CONS_INFO.GetReadyLoadText(CONS_INFO.URLS.TELEPORT_HANDLER_URL)
-local MATCH_HANDLER_SCRIPT = CONS_INFO.GetReadyLoadText(CONS_INFO.URLS.WRONG_MATCH_HANDLER_URL)
 local MovementApi = CONS_INFO.Load(CONS_INFO.URLS.MOVEMENT_LIB_URL)
 
 -- initialize executor specific required APIs
@@ -27,8 +24,7 @@ for i=0, 4 do
     print(type(libs[i]))
 end
 
-if (type(MainLogicApi) == "table") and 
-   (type(MovementApi) == "table") and 
+if (type(MovementApi) == "table") and 
    (type(CONS_INFO) == "table") then
     print("All modules loaded successfully!")
 else

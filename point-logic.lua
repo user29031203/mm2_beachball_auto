@@ -1,9 +1,16 @@
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local MyId = LocalPlayer.UserId
+
 local Logic = {}
 
 local CONS_INFO_URL = "https://raw.githubusercontent.com/user29031203/LegendZero/refs/heads/main/constants.lua" 
 local CONS_INFO = loadstring(game:HttpGet(CONS_INFO_URL))()
 
+--external libs
 local LeaderboardApi = CONS_INFO.Load(CONS_INFO.URLS.LEADERBOARD_LIB_URL)
+local TELEPORT_HANDLER_SCRIPT = CONS_INFO.GetReadyLoadText(CONS_INFO.URLS.TELEPORT_HANDLER_URL)
+local MATCH_HANDLER_SCRIPT = CONS_INFO.GetReadyLoadText(CONS_INFO.URLS.WRONG_MATCH_HANDLER_URL)
 
 -- get points of both client
 local hosterShouldLose = LeaderboardApi.ShouldHosterLose(CONS_INFO.hosterName, CONS_INFO.joinerName)
